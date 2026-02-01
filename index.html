@@ -3,35 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colmado El Ideal</title>
-
+<title>Colmado El Ideal - Panel Visual</title>
 <style>
 body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
   background:#fff7ed;
   color:#333;
 }
 
-.hero {
+.hero{
   height:60vh;
   background:url("logo.png") center/cover no-repeat;
 }
 
-header {
+header{
   background:#f57c00;
   color:white;
   text-align:center;
   padding:20px;
 }
 
-main {
+main{
   max-width:1000px;
   margin:auto;
   padding:20px;
 }
 
-.card {
+.card{
   background:white;
   padding:20px;
   margin-bottom:20px;
@@ -39,9 +38,9 @@ main {
   box-shadow:0 6px 15px rgba(0,0,0,.1);
 }
 
-h2 {color:#ef6c00;}
+h2{color:#ef6c00;}
 
-.product {
+.product{
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -49,7 +48,7 @@ h2 {color:#ef6c00;}
   padding:10px 0;
 }
 
-.product img {
+.product img{
   width:60px;
   height:60px;
   object-fit:cover;
@@ -57,18 +56,19 @@ h2 {color:#ef6c00;}
   margin-right:10px;
 }
 
-.product-info {
+.product-info{
   flex:1;
   display:flex;
   flex-direction:column;
 }
 
-.product-qty {
+.product-qty{
   display:flex;
   align-items:center;
+  margin-top:5px;
 }
 
-.product-qty button {
+.product-qty button{
   background:#f57c00;
   border:none;
   color:white;
@@ -76,30 +76,31 @@ h2 {color:#ef6c00;}
   font-weight:bold;
   cursor:pointer;
   border-radius:6px;
+  margin-right:5px;
 }
 
-.product-qty input {
+.product-qty input{
   width:50px;
   text-align:center;
-  margin:0 5px;
+  margin-right:5px;
   border:1px solid #ccc;
   border-radius:6px;
   padding:4px;
 }
 
-.agotado {
+.agotado{
   color:#999;
   text-decoration:line-through;
 }
 
-#pedido {
+#pedido{
   white-space:pre-line;
   background:#fff3e0;
   padding:15px;
   border-radius:10px;
 }
 
-.btn {
+.btn{
   display:inline-block;
   margin-top:15px;
   background:#25D366;
@@ -110,27 +111,62 @@ h2 {color:#ef6c00;}
   font-weight:bold;
 }
 
-footer{
-  text-align:center;
+#panelEdicion{
+  background:#fff3e0;
   padding:15px;
-  color:#666;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+
+#panelEdicion input, #panelEdicion select{
+  margin:5px 0;
+  padding:6px;
+  width:100%;
+  box-sizing:border-box;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+#panelEdicion button{
+  margin-top:10px;
+  background:#f57c00;
+  color:white;
+  border:none;
+  padding:10px 15px;
+  font-weight:bold;
+  border-radius:8px;
+  cursor:pointer;
 }
 </style>
 </head>
-
 <body>
 
 <div class="hero"></div>
-
 <header>
 <h1>Colmado El Ideal</h1>
-<p>Arma tu pedido y envíalo por WhatsApp</p>
+<p>Panel visual para editar catálogo y enviar pedidos</p>
 </header>
 
 <main>
 
 <div class="card">
-<h2>🛒 Catálogo</h2>
+<h2>🛒 Panel de edición de productos</h2>
+<div id="panelEdicion">
+  <select id="productoSelect"></select>
+  <input type="text" id="nombreProd" placeholder="Nombre del producto">
+  <input type="number" id="precioProd" placeholder="Precio">
+  <input type="text" id="imagenProd" placeholder="URL de la imagen">
+  <select id="disponibleProd">
+    <option value="true">Disponible</option>
+    <option value="false">Agotado</option>
+  </select>
+  <button onclick="guardarProducto()">Guardar cambios</button>
+  <button onclick="agregarProducto()">Agregar nuevo producto</button>
+</div>
+</div>
+
+<div class="card">
+<h2>📦 Catálogo visible para clientes</h2>
 <div id="productos"></div>
 </div>
 
@@ -147,8 +183,8 @@ footer{
 </footer>
 
 <script>
-// LISTA DE PRODUCTOS (fácil de editar)
-let catalogo = [
+// Datos del catálogo
+let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [
   {nombre:"Pan", precio:20, imagen:"https://i.imgur.com/Lf6wq3X.png", disponible:true},
   {nombre:"Huevos", precio:15, imagen:"https://i.imgur.com/3iYv1F0.png", disponible:true},
   {nombre:"Refresco", precio:50, imagen:"https://i.imgur.com/jY7jWqZ.png", disponible:true},
@@ -162,14 +198,14 @@ function mostrarProductos(){
   cont.innerHTML = "";
   catalogo.forEach((p,i)=>{
     const div = document.createElement("div");
-    div.className = "product";
+    div.className="product";
     div.innerHTML = `
       <img src="${p.imagen}" alt="${p.nombre}">
       <div class="product-info">
         <strong>${p.nombre} - RD$${p.precio}</strong>
         ${p.disponible ? `<div class="product-qty">
           <button onclick="cambiarCantidad(${i},-1)">-</button>
-          <input type="number" value="1" min="1" id="qty${i}">
+          <input type="number" min="1" value="1" id="qty${i}">
           <button onclick="cambiarCantidad(${i},1)">+</button>
           <button onclick="agregarAlPedido(${i})">Agregar</button>
         </div>` : `<span class="agotado">Agotado</span>`}
@@ -177,19 +213,20 @@ function mostrarProductos(){
     `;
     cont.appendChild(div);
   });
+  actualizarSelect();
 }
 
 function cambiarCantidad(i, delta){
   const input = document.getElementById("qty"+i);
-  let val = parseInt(input.value);
-  val += delta;
+  let val=parseInt(input.value);
+  val+=delta;
   if(val<1) val=1;
-  input.value = val;
+  input.value=val;
 }
 
 function agregarAlPedido(i){
-  const p = catalogo[i];
-  const qty = parseInt(document.getElementById("qty"+i).value);
+  const p=catalogo[i];
+  const qty=parseInt(document.getElementById("qty"+i).value);
   pedido.push({nombre:p.nombre, precio:p.precio, cantidad:qty});
   localStorage.setItem("pedido", JSON.stringify(pedido));
   actualizarPedido();
@@ -201,21 +238,69 @@ function actualizarPedido(){
     document.getElementById("enviar").href="#";
     return;
   }
-  let texto = "";
-  let total = 0;
+  let texto="";
+  let total=0;
   pedido.forEach(p=>{
     texto+=`${p.cantidad} x ${p.nombre} = RD$${p.precio*p.cantidad}\n`;
-    total += p.precio*p.cantidad;
+    total+=p.precio*p.cantidad;
   });
   texto+=`\nTotal: RD$${total}`;
-  document.getElementById("pedido").innerText = texto;
-
-  let mensaje = encodeURIComponent("Hola, quiero hacer este pedido:\n\n"+texto);
-  document.getElementById("enviar").href = "https://wa.me/18296020646?text="+mensaje;
+  document.getElementById("pedido").innerText=texto;
+  let mensaje=encodeURIComponent("Hola, quiero hacer este pedido:\n\n"+texto);
+  document.getElementById("enviar").href="https://wa.me/18296020646?text="+mensaje;
 }
 
+// PANEL VISUAL
+function actualizarSelect(){
+  const select=document.getElementById("productoSelect");
+  select.innerHTML="";
+  catalogo.forEach((p,i)=>{
+    const opt=document.createElement("option");
+    opt.value=i;
+    opt.text=p.nombre;
+    select.appendChild(opt);
+  });
+  cargarProducto();
+}
+
+function cargarProducto(){
+  const i=document.getElementById("productoSelect").value;
+  const p=catalogo[i];
+  document.getElementById("nombreProd").value=p.nombre;
+  document.getElementById("precioProd").value=p.precio;
+  document.getElementById("imagenProd").value=p.imagen;
+  document.getElementById("disponibleProd").value=p.disponible;
+}
+
+function guardarProducto(){
+  const i=document.getElementById("productoSelect").value;
+  catalogo[i]={
+    nombre: document.getElementById("nombreProd").value,
+    precio: parseInt(document.getElementById("precioProd").value),
+    imagen: document.getElementById("imagenProd").value,
+    disponible: document.getElementById("disponibleProd").value==="true"
+  };
+  localStorage.setItem("catalogo", JSON.stringify(catalogo));
+  mostrarProductos();
+}
+
+function agregarProducto(){
+  catalogo.push({
+    nombre:"Nuevo producto",
+    precio:0,
+    imagen:"",
+    disponible:true
+  });
+  localStorage.setItem("catalogo", JSON.stringify(catalogo));
+  mostrarProductos();
+}
+
+// Carga inicial
 mostrarProductos();
 actualizarPedido();
+
+// Cambiar campos al seleccionar otro producto
+document.getElementById("productoSelect").addEventListener("change", cargarProducto);
 </script>
 
 </body>
