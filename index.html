@@ -3,170 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colmado El Ideal - Mini tienda profesional</title>
+<title>Colmado El Ideal - Catálogo</title>
 <style>
-/* Colores y tipografía */
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#fff7ed;
-  color:#333;
-}
-.hero{
-  height:60vh;
-  background:url("logo.png") center/cover no-repeat;
-}
-header{
-  background:#f57c00;
-  color:white;
-  text-align:center;
-  padding:20px;
-  box-shadow:0 4px 10px rgba(0,0,0,.2);
-}
-header h1{margin:0;}
-main{
-  max-width:1000px;
-  margin:auto;
-  padding:20px;
-}
-.card{
-  background:white;
-  padding:20px;
-  margin-bottom:20px;
-  border-radius:14px;
-  box-shadow:0 6px 15px rgba(0,0,0,.1);
-}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff7ed;color:#333;}
+.hero{height:60vh;background:url("logo.png") center/cover no-repeat;}
+header{background:#f57c00;color:white;text-align:center;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,.2);}
+main{max-width:1000px;margin:auto;padding:20px;}
+.card{background:white;padding:20px;margin-bottom:20px;border-radius:14px;box-shadow:0 6px 15px rgba(0,0,0,.1);}
 h2{color:#ef6c00;}
-.product-card{
-  display:flex;
-  align-items:center;
-  margin-bottom:15px;
-  border-bottom:1px solid #eee;
-  padding-bottom:10px;
-}
-.product-card img{
-  width:80px;
-  height:80px;
-  object-fit:cover;
-  border-radius:8px;
-  margin-right:15px;
-}
-.product-info{
-  flex:1;
-}
-.product-info strong{
-  display:block;
-  margin-bottom:5px;
-}
-.qty-controls{
-  display:flex;
-  align-items:center;
-  margin-top:5px;
-}
-.qty-controls button{
-  background:#f57c00;
-  border:none;
-  color:white;
-  padding:6px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:bold;
-}
-.qty-controls input{
-  width:50px;
-  text-align:center;
-  margin:0 5px;
-  border:1px solid #ccc;
-  border-radius:6px;
-  padding:4px;
-}
-.agotado{
-  color:#999;
-  text-decoration:line-through;
-}
-#pedido{
-  white-space:pre-line;
-  background:#fff3e0;
-  padding:15px;
-  border-radius:10px;
-}
-#vistaCarrito{
-  background:#fff3e0;
-  padding:10px;
-  border-radius:10px;
-  margin-top:10px;
-}
-#vistaCarrito img{
-  width:50px;
-  height:50px;
-  object-fit:cover;
-  border-radius:6px;
-  margin-right:10px;
-  vertical-align:middle;
-}
-.btn{
-  display:inline-block;
-  margin-top:15px;
-  background:#25D366;
-  color:white;
-  padding:14px 22px;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:bold;
-  transition:all .2s;
-}
+.product-card{display:flex;align-items:center;margin-bottom:15px;border-bottom:1px solid #eee;padding-bottom:10px;}
+.product-card img{width:80px;height:80px;object-fit:cover;border-radius:8px;margin-right:15px;}
+.product-info{flex:1;}
+.product-info strong{display:block;margin-bottom:5px;}
+.qty-controls{display:flex;align-items:center;margin-top:5px;}
+.qty-controls button{background:#f57c00;border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;}
+.qty-controls input{width:50px;text-align:center;margin:0 5px;border:1px solid #ccc;border-radius:6px;padding:4px;}
+.agotado{color:#999;text-decoration:line-through;}
+#pedido{white-space:pre-line;background:#fff3e0;padding:15px;border-radius:10px;}
+#vistaCarrito{background:#fff3e0;padding:10px;border-radius:10px;margin-top:10px;}
+#vistaCarrito img{width:50px;height:50px;object-fit:cover;border-radius:6px;margin-right:10px;vertical-align:middle;}
+.btn{display:inline-block;margin-top:15px;background:#25D366;color:white;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:bold;transition:all .2s;}
 .btn:hover{opacity:.9;}
-#panelEdicion input,#panelEdicion select,#panelEdicion button{
-  width:100%;
-  margin:5px 0;
-  padding:8px;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-#panelEdicion button{
-  background:#f57c00;
-  color:white;
-  border:none;
-  cursor:pointer;
-  font-weight:bold;
-}
 </style>
 </head>
 <body>
 
 <div class="hero"></div>
-
 <header>
 <h1>Colmado El Ideal</h1>
-<p>Mini-tienda profesional con pedidos por WhatsApp</p>
+<p>Mini-tienda con pedidos por WhatsApp</p>
 </header>
 
 <main>
 
-<!-- Panel de edición -->
-<div class="card">
-<h2>🛠 Panel de edición de productos</h2>
-<div id="panelEdicion">
-  <select id="productoSelect"></select>
-  <input type="text" id="nombreProd" placeholder="Nombre del producto">
-  <input type="number" id="precioProd" placeholder="Precio">
-  <input type="file" id="imagenLocal" accept="image/*">
-  <select id="disponibleProd">
-    <option value="true">Disponible</option>
-    <option value="false">Agotado</option>
-  </select>
-  <button onclick="guardarProducto()">Guardar cambios</button>
-  <button onclick="agregarProducto()">Agregar nuevo producto</button>
-</div>
-</div>
-
-<!-- Catálogo -->
 <div class="card">
 <h2>🛒 Catálogo para clientes</h2>
 <div id="productos"></div>
 </div>
 
-<!-- Pedido y vista previa -->
 <div class="card">
 <h2>📦 Tu pedido</h2>
 <div id="pedido">No hay productos agregados.</div>
@@ -175,20 +49,13 @@ h2{color:#ef6c00;}
 </div>
 
 </main>
-
 <footer>© 2026 Colmado El Ideal</footer>
 
 <script>
-// Datos iniciales
-let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [
-  {nombre:"Pan", precio:20, imagen:"https://i.imgur.com/Lf6wq3X.png", disponible:true},
-  {nombre:"Huevos", precio:15, imagen:"https://i.imgur.com/3iYv1F0.png", disponible:true},
-  {nombre:"Refresco", precio:50, imagen:"https://i.imgur.com/jY7jWqZ.png", disponible:true},
-  {nombre:"Cerveza", precio:80, imagen:"https://i.imgur.com/7w5e7Zy.png", disponible:false}
-];
+// Datos iniciales (los productos se mantienen en localStorage)
+let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [];
 let pedido = JSON.parse(localStorage.getItem("pedido")) || [];
 
-// Mostrar catálogo
 function mostrarProductos(){
   const cont=document.getElementById("productos");
   cont.innerHTML="";
@@ -210,10 +77,8 @@ function mostrarProductos(){
     `;
     cont.appendChild(div);
   });
-  actualizarSelect();
 }
 
-// Cantidad +/-
 function cambiarCantidad(i, delta){
   const input=document.getElementById("qty"+i);
   let val=parseInt(input.value);
@@ -222,7 +87,6 @@ function cambiarCantidad(i, delta){
   input.value=val;
 }
 
-// Agregar al pedido
 function agregarAlPedido(i){
   const p=catalogo[i];
   const qty=parseInt(document.getElementById("qty"+i).value);
@@ -231,7 +95,6 @@ function agregarAlPedido(i){
   actualizarPedido();
 }
 
-// Actualizar pedido y vista previa
 function actualizarPedido(){
   const vista=document.getElementById("vistaCarrito");
   if(pedido.length===0){
@@ -258,59 +121,8 @@ function actualizarPedido(){
   document.getElementById("enviar").href="https://wa.me/18296020646?text="+mensaje;
 }
 
-// PANEL VISUAL
-function actualizarSelect(){
-  const select=document.getElementById("productoSelect");
-  select.innerHTML="";
-  catalogo.forEach((p,i)=>{
-    const opt=document.createElement("option");
-    opt.value=i;
-    opt.text=p.nombre;
-    select.appendChild(opt);
-  });
-  cargarProducto();
-}
-
-function cargarProducto(){
-  const i=document.getElementById("productoSelect").value;
-  const p=catalogo[i];
-  document.getElementById("nombreProd").value=p.nombre;
-  document.getElementById("precioProd").value=p.precio;
-  document.getElementById("imagenLocal").value="";
-  document.getElementById("disponibleProd").value=p.disponible;
-}
-
-function guardarProducto(){
-  const i=document.getElementById("productoSelect").value;
-  const nombre=document.getElementById("nombreProd").value;
-  const precio=parseInt(document.getElementById("precioProd").value);
-  const disponible=document.getElementById("disponibleProd").value==="true";
-
-  const fileInput=document.getElementById("imagenLocal");
-  if(fileInput.files && fileInput.files[0]){
-    const reader=new FileReader();
-    reader.onload=function(e){
-      catalogo[i]={nombre, precio, imagen:e.target.result, disponible};
-      localStorage.setItem("catalogo", JSON.stringify(catalogo));
-      mostrarProductos();
-    }
-    reader.readAsDataURL(fileInput.files[0]);
-  } else {
-    catalogo[i]={nombre, precio, imagen:catalogo[i].imagen, disponible};
-    localStorage.setItem("catalogo", JSON.stringify(catalogo));
-    mostrarProductos();
-  }
-}
-
-function agregarProducto(){
-  catalogo.push({nombre:"Nuevo producto", precio:0, imagen:"", disponible:true});
-  localStorage.setItem("catalogo", JSON.stringify(catalogo));
-  mostrarProductos();
-}
-
 mostrarProductos();
 actualizarPedido();
-document.getElementById("productoSelect").addEventListener("change", cargarProducto);
 </script>
 
 </body>
