@@ -1,51 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colmado El Ideal</title>
-  <meta name="description" content="Colmado El Ideal - Tu colmado de confianza." />
+  <meta name="description" content="Colmado El Ideal - Tu colmado de confianza, siempre cerca de ti.">
 
   <style>
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background-color: #f7f7f7;
+      background-color: #fdf8f2;
       background-image: url("logo.png");
       background-repeat: no-repeat;
-      background-position: center 140px;
-      background-size: 300px;
+      background-position: center 90px;
+      background-size: 420px;
       color: #333;
     }
 
     header {
-      background: #1f7a1f;
+      background: linear-gradient(90deg, #f57c00, #ef6c00);
       color: white;
-      padding: 20px;
       text-align: center;
+      padding: 26px 15px;
     }
 
     main {
       max-width: 900px;
-      margin: auto;
+      margin: 470px auto 40px auto;
       padding: 20px;
     }
 
-    section {
+    .card {
       background: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
+      padding: 22px;
+      border-radius: 14px;
+      margin-bottom: 22px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      border-left: 6px solid #f57c00;
     }
 
-    .btn {
+    h2 {
+      color: #ef6c00;
+      margin-top: 0;
+    }
+
+    .btn-whatsapp {
       display: inline-block;
       background: #25D366;
       color: white;
-      padding: 12px 18px;
-      border-radius: 8px;
+      padding: 14px 22px;
+      border-radius: 10px;
       text-decoration: none;
       font-weight: bold;
+      font-size: 16px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 18px;
+      font-size: 14px;
+      color: #666;
     }
   </style>
 </head>
@@ -59,26 +74,29 @@
 
   <main>
 
-    <section>
+    <div class="card">
       <h2>⏰ Horario</h2>
-      <p>Todos los días: <strong>7:00 a.m. – 12:00 a.m.</strong></p>
-    </section>
+      <p>Todos los días:<br><strong>7:00 a.m. – 12:00 a.m.</strong></p>
+    </div>
 
-    <section>
+    <div class="card">
       <h2>📍 Ubicación</h2>
       <p>Calle 18 de Noviembre, al lado de la escuela</p>
       <p>República Dominicana</p>
-    </section>
+    </div>
 
-    <section>
-      <h2>📲 WhatsApp</h2>
-      <a class="btn" href="https://wa.me/18296020646" target="_blank">
+    <div class="card">
+      <h2>📲 Contáctanos</h2>
+      <a class="btn-whatsapp" href="https://wa.me/18296020646" target="_blank">
         Escribir por WhatsApp
       </a>
-    </section>
+    </div>
 
   </main>
 
+  <footer>
+    © 2026 Colmado El Ideal · Todos los derechos reservados
+  </footer>
+
 </body>
 </html>
-
