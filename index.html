@@ -24,6 +24,7 @@ h2{color:#ef6c00;}
 #vistaCarrito img{width:50px;height:50px;object-fit:cover;border-radius:6px;margin-right:10px;vertical-align:middle;}
 .btn{display:inline-block;margin-top:15px;background:#25D366;color:white;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:bold;transition:all .2s;}
 .btn:hover{opacity:.9;}
+#buscador{width:100%;padding:10px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;font-size:16px;}
 </style>
 </head>
 <body>
@@ -35,6 +36,11 @@ h2{color:#ef6c00;}
 </header>
 
 <main>
+
+<div class="card">
+<h2>🔎 Buscar producto</h2>
+<input type="text" id="buscador" placeholder="Escribe el nombre del producto">
+</div>
 
 <div class="card">
 <h2>🛒 Catálogo para clientes</h2>
@@ -57,11 +63,16 @@ h2{color:#ef6c00;}
 let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [];
 let pedido = JSON.parse(localStorage.getItem("pedido")) || [];
 
-// ===== Mostrar productos =====
-function mostrarProductos(){
+// ===== Función mostrar productos =====
+function mostrarProductos(filtro=""){
   const cont=document.getElementById("productos");
   cont.innerHTML="";
-  catalogo.forEach((p,i)=>{
+  let productosFiltrados = catalogo.filter(p=>p.nombre.toLowerCase().includes(filtro.toLowerCase()));
+  if(productosFiltrados.length===0){
+    cont.innerHTML="<p>No se encontraron productos.</p>";
+    return;
+  }
+  productosFiltrados.forEach((p,i)=>{
     const div=document.createElement("div");
     div.className="product-card";
     div.innerHTML=`
@@ -129,6 +140,11 @@ function actualizarPedido(){
   let mensaje=encodeURIComponent("Hola, quiero hacer este pedido:\n\n"+texto);
   document.getElementById("enviar").href="https://wa.me/18296020646?text="+mensaje;
 }
+
+// ===== Buscador en tiempo real =====
+document.getElementById("buscador").addEventListener("input", function(){
+  mostrarProductos(this.value);
+});
 
 // ===== Inicializar =====
 mostrarProductos();
