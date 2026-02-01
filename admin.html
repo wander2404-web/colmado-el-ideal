@@ -2,138 +2,185 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<title>Colmado El Ideal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colmado El Ideal - Admin</title>
+
 <style>
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff7ed;color:#333;}
-header{background:#f57c00;color:white;text-align:center;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,.2);}
-main{max-width:1000px;margin:auto;padding:20px;}
-.card{background:white;padding:20px;margin-bottom:20px;border-radius:14px;box-shadow:0 6px 15px rgba(0,0,0,.1);}
-h2{color:#ef6c00;}
-input,button,select{padding:6px;margin:3px;border-radius:6px;border:1px solid #ccc;}
-button{background:#f57c00;color:white;border:none;cursor:pointer;font-weight:bold;}
-.product-item{display:flex;align-items:center;margin-bottom:10px;}
-.product-item img{width:50px;height:50px;object-fit:cover;border-radius:6px;margin-right:10px;}
+body { font-family: Arial; margin:0; background:#f5f5f5; }
+header { background:#fff; padding:10px; position:sticky; top:0; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,.1); }
+header img { max-width:100%; height:90px; display:block; margin:auto; }
+
+.search { padding:10px; }
+.search input { width:100%; padding:10px; font-size:16px; }
+
+.products { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; padding:10px; }
+.card { background:#fff; padding:10px; border-radius:8px; text-align:center; }
+.card img { width:100%; height:120px; object-fit:contain; }
+.qty { display:flex; justify-content:center; gap:10px; margin-top:5px; }
+button { padding:5px 10px; }
+
+.cart { background:#fff; padding:10px; margin:10px; border-radius:8px; }
+.cart button { width:100%; margin-top:5px; }
+
+.admin { background:#fff; padding:10px; margin:10px; border-radius:8px; }
+.hidden { display:none; }
+
+input, select { width:100%; padding:6px; margin-bottom:5px; }
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>Panel Admin - Colmado El Ideal</h1>
-<p>Solo usuarios autorizados pueden editar productos</p>
+<img src="logotipo.png">
 </header>
 
-<main id="panel" style="display:none;">
-
-<div class="card">
-<h2>🛠 Panel de edición de productos</h2>
-<div id="productosAdmin"></div>
-
-<h3>Agregar nuevo producto</h3>
-<input type="text" id="nuevoNombre" placeholder="Nombre del producto">
-<input type="number" id="nuevoPrecio" placeholder="Precio" min="0">
-<input type="text" id="nuevoImagen" placeholder="URL de imagen">
-<select id="nuevoDisponible">
-  <option value="true">Disponible</option>
-  <option value="false">Agotado</option>
-</select>
-<button onclick="agregarProducto()">Agregar producto</button>
-
-<button onclick="cargarEjemplo()">🔄 Cargar catálogo de ejemplo</button>
+<div class="search">
+<input type="text" id="search" placeholder="🔍 Buscar producto...">
 </div>
 
-</main>
+<div class="products" id="products"></div>
+
+<div class="cart">
+<h3>🛒 Pedido</h3>
+<div id="cartItems"></div>
+<button onclick="sendWhatsApp()">📲 Enviar pedido</button>
+<button onclick="clearCart()">🗑 Vaciar carrito</button>
+</div>
+
+<div class="admin">
+<h3>🔐 Panel administrador</h3>
+
+<div id="login">
+<input type="password" id="pass" placeholder="Clave">
+<button onclick="login()">Entrar</button>
+</div>
+
+<div id="panel" class="hidden">
+<h4>Productos</h4>
+<div id="adminProducts"></div>
+
+<h4>Agregar / Editar</h4>
+<input id="pName" placeholder="Nombre">
+<input id="pPrice" placeholder="Precio">
+<input id="pImg" placeholder="URL imagen">
+<button onclick="saveProduct()">Guardar</button>
+</div>
+</div>
 
 <script>
-// ===== Contraseña con recordatorio =====
-const CLAVE_ADMIN = "2404";
-if(localStorage.getItem("adminAccess") !== CLAVE_ADMIN){
-  let clave = prompt("Introduce la contraseña de admin:");
-  if(clave !== CLAVE_ADMIN){
-    alert("Clave incorrecta. No tienes acceso.");
-    document.body.innerHTML="<h2 style='text-align:center;margin-top:50px;'>Acceso denegado</h2>";
-  } else {
-    localStorage.setItem("adminAccess", CLAVE_ADMIN);
-  }
+const ADMIN_PASS = "2404";
+
+let products = JSON.parse(localStorage.getItem("products")) || [
+ {id:1,name:"Arroz",price:50,img:"https://i.imgur.com/7QKJQyN.png"},
+ {id:2,name:"Aceite",price:150,img:"https://i.imgur.com/8mLk0aP.png"},
+ {id:3,name:"Habichuelas",price:80,img:"https://i.imgur.com/RW5XkqB.png"},
+ {id:4,name:"Azúcar",price:45,img:"https://i.imgur.com/m6Zs7pX.png"},
+ {id:5,name:"Leche",price:70,img:"https://i.imgur.com/NQjvYqg.png"}
+];
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveData(){
+ localStorage.setItem("products",JSON.stringify(products));
+ localStorage.setItem("cart",JSON.stringify(cart));
 }
 
-// ===== Datos del catálogo =====
-let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [];
+function render(){
+ let pDiv=document.getElementById("products");
+ pDiv.innerHTML="";
+ let s=document.getElementById("search").value.toLowerCase();
 
-function cargarEjemplo(){
-  catalogo = [
-    {nombre:"Coca-Cola 1.5L", precio:120, imagen:"https://i.imgur.com/1R1YFfV.jpg", disponible:true},
-    {nombre:"Presidente 330ml", precio:80, imagen:"https://i.imgur.com/2o3dV7N.jpg", disponible:true},
-    {nombre:"Pan de barra", precio:40, imagen:"https://i.imgur.com/Qc5v7lJ.jpg", disponible:true},
-    {nombre:"Huevos x12", precio:150, imagen:"https://i.imgur.com/Xd9J5YU.jpg", disponible:true},
-    {nombre:"Arroz 1kg", precio:100, imagen:"https://i.imgur.com/7a4l2jE.jpg", disponible:true},
-    {nombre:"Aceite vegetal 1L", precio:180, imagen:"https://i.imgur.com/yzpXzTJ.jpg", disponible:true},
-    {nombre:"Leche Laive 1L", precio:90, imagen:"https://i.imgur.com/3XmjJh1.jpg", disponible:true},
-    {nombre:"Galletas Noel", precio:50, imagen:"https://i.imgur.com/0yf1h2C.jpg", disponible:true},
-    {nombre:"Café 250g", precio:200, imagen:"https://i.imgur.com/Nn1vFZo.jpg", disponible:true},
-    {nombre:"Azúcar 1kg", precio:80, imagen:"https://i.imgur.com/8yC3Q3y.jpg", disponible:true}
-  ];
-  localStorage.setItem("catalogo", JSON.stringify(catalogo));
-  mostrarAdmin();
+ products.filter(p=>p.name.toLowerCase().includes(s)).forEach(p=>{
+  let q=cart.find(i=>i.id==p.id)?.qty||0;
+  pDiv.innerHTML+=`
+  <div class="card">
+   <img src="${p.img}">
+   <b>${p.name}</b><br>$${p.price}
+   <div class="qty">
+    <button onclick="add(${p.id},-1)">−</button>
+    ${q}
+    <button onclick="add(${p.id},1)">+</button>
+   </div>
+  </div>`;
+ });
+
+ let cDiv=document.getElementById("cartItems");
+ cDiv.innerHTML="";
+ cart.forEach(i=>{
+  let p=products.find(p=>p.id==i.id);
+  cDiv.innerHTML+=`${p.name} x ${i.qty} <button onclick="remove(${i.id})">❌</button><br>`;
+ });
+
+ saveData();
+ renderAdmin();
 }
 
-// ===== Mostrar productos en el panel =====
-function mostrarAdmin(){
-  const cont=document.getElementById("productosAdmin");
-  cont.innerHTML="";
-  if(catalogo.length===0){
-    cont.innerHTML="<p>No hay productos en el catálogo. Usa 'Cargar catálogo de ejemplo' o agrega uno nuevo.</p>";
-    return;
-  }
-  catalogo.forEach((p,i)=>{
-    const div=document.createElement("div");
-    div.className="product-item";
-    div.innerHTML=`
-      <img src="${p.imagen}" alt="${p.nombre}">
-      <input type="text" value="${p.nombre}" onchange="editarProducto(${i},'nombre',this.value)">
-      <input type="number" value="${p.precio}" onchange="editarProducto(${i},'precio',this.value)">
-      <input type="text" value="${p.imagen}" onchange="editarProducto(${i},'imagen',this.value)">
-      <select onchange="editarProducto(${i},'disponible',this.value)">
-        <option value="true" ${p.disponible?'selected':''}>Disponible</option>
-        <option value="false" ${!p.disponible?'selected':''}>Agotado</option>
-      </select>
-      <button onclick="eliminarProducto(${i})">Eliminar</button>
-    `;
-    cont.appendChild(div);
-  });
-  localStorage.setItem("catalogo", JSON.stringify(catalogo));
+function add(id,q){
+ let i=cart.find(x=>x.id==id);
+ if(!i && q>0) cart.push({id,qty:q});
+ else if(i){ i.qty+=q; if(i.qty<=0) cart=cart.filter(x=>x.id!=id);}
+ render();
 }
 
-// ===== Funciones editar, eliminar y agregar =====
-function editarProducto(i,campo,valor){
-  if(campo==="precio") valor=parseInt(valor);
-  if(campo==="disponible") valor=(valor==="true");
-  catalogo[i][campo]=valor;
-  localStorage.setItem("catalogo", JSON.stringify(catalogo));
+function remove(id){ cart=cart.filter(x=>x.id!=id); render(); }
+function clearCart(){ cart=[]; render(); }
+
+function sendWhatsApp(){
+ let msg="Pedido:%0A";
+ cart.forEach(i=>{
+  let p=products.find(p=>p.id==i.id);
+  msg+=`${p.name} x ${i.qty}%0A`;
+ });
+ window.open("https://wa.me/18090000000?text="+msg);
 }
 
-function eliminarProducto(i){
-  catalogo.splice(i,1);
-  mostrarAdmin();
+function login(){
+ if(document.getElementById("pass").value===ADMIN_PASS){
+  localStorage.setItem("admin","ok");
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("panel").classList.remove("hidden");
+ } else alert("Clave incorrecta");
 }
 
-function agregarProducto(){
-  const nombre=document.getElementById("nuevoNombre").value;
-  const precio=parseInt(document.getElementById("nuevoPrecio").value);
-  const imagen=document.getElementById("nuevoImagen").value || "https://via.placeholder.com/80";
-  const disponible=document.getElementById("nuevoDisponible").value==="true";
-  if(nombre && precio){
-    catalogo.push({nombre,precio,imagen,disponible});
-    document.getElementById("nuevoNombre").value="";
-    document.getElementById("nuevoPrecio").value="";
-    document.getElementById("nuevoImagen").value="";
-    mostrarAdmin();
-  }
+function renderAdmin(){
+ let a=document.getElementById("adminProducts");
+ if(!a) return;
+ a.innerHTML="";
+ products.forEach(p=>{
+  a.innerHTML+=`${p.name} ($${p.price})
+  <button onclick="edit(${p.id})">✏️</button>
+  <button onclick="del(${p.id})">🗑</button><br>`;
+ });
 }
 
-// ===== Inicializar =====
-document.getElementById("panel").style.display="block";
-mostrarAdmin();
+function edit(id){
+ let p=products.find(x=>x.id==id);
+ pName.value=p.name; pPrice.value=p.price; pImg.value=p.img;
+ pName.dataset.id=id;
+}
+
+function del(id){ products=products.filter(x=>x.id!=id); render(); }
+
+function saveProduct(){
+ let id=pName.dataset.id;
+ if(id){
+  let p=products.find(x=>x.id==id);
+  p.name=pName.value; p.price=pPrice.value; p.img=pImg.value;
+ } else {
+  products.push({id:Date.now(),name:pName.value,price:pPrice.value,img:pImg.value});
+ }
+ pName.value=pPrice.value=pImg.value="";
+ pName.dataset.id="";
+ render();
+}
+
+if(localStorage.getItem("admin")=="ok"){
+ document.getElementById("login").classList.add("hidden");
+ document.getElementById("panel").classList.remove("hidden");
+}
+
+render();
 </script>
 
 </body>
