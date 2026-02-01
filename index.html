@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colmado El Ideal - Mini tienda con carrito</title>
+<title>Colmado El Ideal - Mini tienda profesional</title>
 <style>
+/* Colores y tipografía */
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
@@ -12,7 +13,7 @@ body{
   color:#333;
 }
 .hero{
-  height:50vh;
+  height:60vh;
   background:url("logo.png") center/cover no-repeat;
 }
 header{
@@ -20,7 +21,9 @@ header{
   color:white;
   text-align:center;
   padding:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,.2);
 }
+header h1{margin:0;}
 main{
   max-width:1000px;
   margin:auto;
@@ -110,7 +113,9 @@ h2{color:#ef6c00;}
   border-radius:10px;
   text-decoration:none;
   font-weight:bold;
+  transition:all .2s;
 }
+.btn:hover{opacity:.9;}
 #panelEdicion input,#panelEdicion select,#panelEdicion button{
   width:100%;
   margin:5px 0;
@@ -130,13 +135,15 @@ h2{color:#ef6c00;}
 <body>
 
 <div class="hero"></div>
+
 <header>
 <h1>Colmado El Ideal</h1>
-<p>Mini-tienda con vista previa del carrito</p>
+<p>Mini-tienda profesional con pedidos por WhatsApp</p>
 </header>
 
 <main>
 
+<!-- Panel de edición -->
 <div class="card">
 <h2>🛠 Panel de edición de productos</h2>
 <div id="panelEdicion">
@@ -145,4 +152,166 @@ h2{color:#ef6c00;}
   <input type="number" id="precioProd" placeholder="Precio">
   <input type="file" id="imagenLocal" accept="image/*">
   <select id="disponibleProd">
-    <option value="tru
+    <option value="true">Disponible</option>
+    <option value="false">Agotado</option>
+  </select>
+  <button onclick="guardarProducto()">Guardar cambios</button>
+  <button onclick="agregarProducto()">Agregar nuevo producto</button>
+</div>
+</div>
+
+<!-- Catálogo -->
+<div class="card">
+<h2>🛒 Catálogo para clientes</h2>
+<div id="productos"></div>
+</div>
+
+<!-- Pedido y vista previa -->
+<div class="card">
+<h2>📦 Tu pedido</h2>
+<div id="pedido">No hay productos agregados.</div>
+<div id="vistaCarrito"></div>
+<a class="btn" id="enviar" target="_blank">📲 Enviar pedido por WhatsApp</a>
+</div>
+
+</main>
+
+<footer>© 2026 Colmado El Ideal</footer>
+
+<script>
+// Datos iniciales
+let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [
+  {nombre:"Pan", precio:20, imagen:"https://i.imgur.com/Lf6wq3X.png", disponible:true},
+  {nombre:"Huevos", precio:15, imagen:"https://i.imgur.com/3iYv1F0.png", disponible:true},
+  {nombre:"Refresco", precio:50, imagen:"https://i.imgur.com/jY7jWqZ.png", disponible:true},
+  {nombre:"Cerveza", precio:80, imagen:"https://i.imgur.com/7w5e7Zy.png", disponible:false}
+];
+let pedido = JSON.parse(localStorage.getItem("pedido")) || [];
+
+// Mostrar catálogo
+function mostrarProductos(){
+  const cont=document.getElementById("productos");
+  cont.innerHTML="";
+  catalogo.forEach((p,i)=>{
+    const div=document.createElement("div");
+    div.className="product-card";
+    div.innerHTML=`
+      <img src="${p.imagen}" alt="${p.nombre}">
+      <div class="product-info">
+        <strong>${p.nombre} - RD$${p.precio}</strong>
+        ${p.disponible ? `
+        <div class="qty-controls">
+          <button onclick="cambiarCantidad(${i},-1)">-</button>
+          <input type="number" min="1" value="1" id="qty${i}">
+          <button onclick="cambiarCantidad(${i},1)">+</button>
+          <button onclick="agregarAlPedido(${i})">Agregar</button>
+        </div>` : `<span class="agotado">Agotado</span>`}
+      </div>
+    `;
+    cont.appendChild(div);
+  });
+  actualizarSelect();
+}
+
+// Cantidad +/-
+function cambiarCantidad(i, delta){
+  const input=document.getElementById("qty"+i);
+  let val=parseInt(input.value);
+  val+=delta;
+  if(val<1) val=1;
+  input.value=val;
+}
+
+// Agregar al pedido
+function agregarAlPedido(i){
+  const p=catalogo[i];
+  const qty=parseInt(document.getElementById("qty"+i).value);
+  pedido.push({nombre:p.nombre, precio:p.precio, cantidad:qty, imagen:p.imagen});
+  localStorage.setItem("pedido", JSON.stringify(pedido));
+  actualizarPedido();
+}
+
+// Actualizar pedido y vista previa
+function actualizarPedido(){
+  const vista=document.getElementById("vistaCarrito");
+  if(pedido.length===0){
+    document.getElementById("pedido").innerText="No hay productos agregados.";
+    vista.innerHTML="";
+    document.getElementById("enviar").href="#";
+    return;
+  }
+  let texto="", total=0;
+  vista.innerHTML="";
+  pedido.forEach(p=>{
+    texto+=`${p.cantidad} x ${p.nombre} = RD$${p.precio*p.cantidad}\n`;
+    total+=p.precio*p.cantidad;
+    const img=document.createElement("img");
+    img.src=p.imagen;
+    img.alt=p.nombre;
+    vista.appendChild(img);
+    vista.appendChild(document.createTextNode(`${p.cantidad} x ${p.nombre} = RD$${p.precio*p.cantidad}`));
+    vista.appendChild(document.createElement("br"));
+  });
+  texto+=`\nTotal: RD$${total}`;
+  document.getElementById("pedido").innerText=texto;
+  let mensaje=encodeURIComponent("Hola, quiero hacer este pedido:\n\n"+texto);
+  document.getElementById("enviar").href="https://wa.me/18296020646?text="+mensaje;
+}
+
+// PANEL VISUAL
+function actualizarSelect(){
+  const select=document.getElementById("productoSelect");
+  select.innerHTML="";
+  catalogo.forEach((p,i)=>{
+    const opt=document.createElement("option");
+    opt.value=i;
+    opt.text=p.nombre;
+    select.appendChild(opt);
+  });
+  cargarProducto();
+}
+
+function cargarProducto(){
+  const i=document.getElementById("productoSelect").value;
+  const p=catalogo[i];
+  document.getElementById("nombreProd").value=p.nombre;
+  document.getElementById("precioProd").value=p.precio;
+  document.getElementById("imagenLocal").value="";
+  document.getElementById("disponibleProd").value=p.disponible;
+}
+
+function guardarProducto(){
+  const i=document.getElementById("productoSelect").value;
+  const nombre=document.getElementById("nombreProd").value;
+  const precio=parseInt(document.getElementById("precioProd").value);
+  const disponible=document.getElementById("disponibleProd").value==="true";
+
+  const fileInput=document.getElementById("imagenLocal");
+  if(fileInput.files && fileInput.files[0]){
+    const reader=new FileReader();
+    reader.onload=function(e){
+      catalogo[i]={nombre, precio, imagen:e.target.result, disponible};
+      localStorage.setItem("catalogo", JSON.stringify(catalogo));
+      mostrarProductos();
+    }
+    reader.readAsDataURL(fileInput.files[0]);
+  } else {
+    catalogo[i]={nombre, precio, imagen:catalogo[i].imagen, disponible};
+    localStorage.setItem("catalogo", JSON.stringify(catalogo));
+    mostrarProductos();
+  }
+}
+
+function agregarProducto(){
+  catalogo.push({nombre:"Nuevo producto", precio:0, imagen:"", disponible:true});
+  localStorage.setItem("catalogo", JSON.stringify(catalogo));
+  mostrarProductos();
+}
+
+mostrarProductos();
+actualizarPedido();
+document.getElementById("productoSelect").addEventListener("change", cargarProducto);
+</script>
+
+</body>
+</html>
