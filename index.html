@@ -2,153 +2,185 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Colmado El Ideal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff7ed;color:#333;}
-header{background:#f57c00;color:white;text-align:center;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,.2);}
-.hero{height:40vh;background:url("logo.png") center/cover no-repeat;}
-main{max-width:1000px;margin:auto;padding:20px;}
-.card{background:white;padding:20px;margin-bottom:20px;border-radius:14px;box-shadow:0 6px 15px rgba(0,0,0,.1);}
-h2{color:#ef6c00;}
-.product-card{display:flex;align-items:center;margin-bottom:15px;border-bottom:1px solid #eee;padding-bottom:10px;}
-.product-card img{width:80px;height:80px;object-fit:cover;border-radius:8px;margin-right:15px;}
-.product-info{flex:1;}
-.product-info strong{display:block;margin-bottom:5px;}
-.qty-controls{display:flex;align-items:center;margin-top:5px;}
-.qty-controls button{background:#f57c00;border:none;color:white;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;}
-.qty-controls input{width:50px;text-align:center;margin:0 5px;border:1px solid #ccc;border-radius:6px;padding:4px;}
-.agotado{color:#999;text-decoration:line-through;}
-#pedido{white-space:pre-line;background:#fff3e0;padding:15px;border-radius:10px;}
-#vistaCarrito{background:#fff3e0;padding:10px;border-radius:10px;margin-top:10px;}
-#vistaCarrito img{width:50px;height:50px;object-fit:cover;border-radius:6px;margin-right:10px;vertical-align:middle;}
-.btn{display:inline-block;margin-top:15px;background:#25D366;color:white;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:bold;transition:all .2s;}
-.btn:hover{opacity:.9;}
-#buscador{width:100%;padding:10px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;font-size:16px;}
+body { font-family: Arial; margin:0; background:#f5f5f5; }
+header { background:#fff; padding:10px; position:sticky; top:0; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,.1); }
+header img { max-width:100%; height:90px; display:block; margin:auto; }
+
+.search { padding:10px; }
+.search input { width:100%; padding:10px; font-size:16px; }
+
+.products { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; padding:10px; }
+.card { background:#fff; padding:10px; border-radius:8px; text-align:center; }
+.card img { width:100%; height:120px; object-fit:contain; }
+.qty { display:flex; justify-content:center; gap:10px; margin-top:5px; }
+button { padding:5px 10px; }
+
+.cart { background:#fff; padding:10px; margin:10px; border-radius:8px; }
+.cart button { width:100%; margin-top:5px; }
+
+.admin { background:#fff; padding:10px; margin:10px; border-radius:8px; }
+.hidden { display:none; }
+
+input, select { width:100%; padding:6px; margin-bottom:5px; }
 </style>
 </head>
+
 <body>
 
-<div class="hero"></div>
 <header>
-<h1>Colmado El Ideal</h1>
-<p>Mini-tienda con pedidos por WhatsApp</p>
+<img src="logotipo.png">
 </header>
 
-<main>
-
-<div class="card">
-<h2>🔎 Buscar producto</h2>
-<input type="text" id="buscador" placeholder="Escribe el nombre del producto">
+<div class="search">
+<input type="text" id="search" placeholder="🔍 Buscar producto...">
 </div>
 
-<div class="card">
-<h2>🛒 Catálogo para clientes</h2>
-<div id="productos"></div>
+<div class="products" id="products"></div>
+
+<div class="cart">
+<h3>🛒 Pedido</h3>
+<div id="cartItems"></div>
+<button onclick="sendWhatsApp()">📲 Enviar pedido</button>
+<button onclick="clearCart()">🗑 Vaciar carrito</button>
 </div>
 
-<div class="card">
-<h2>📦 Tu pedido</h2>
-<div id="pedido">No hay productos agregados.</div>
-<div id="vistaCarrito"></div>
-<a class="btn" id="enviar" target="_blank">📲 Enviar pedido por WhatsApp</a>
-<button class="btn" onclick="vaciarPedido()">🗑️ Vaciar carrito</button>
+<div class="admin">
+<h3>🔐 Panel administrador</h3>
+
+<div id="login">
+<input type="password" id="pass" placeholder="Clave">
+<button onclick="login()">Entrar</button>
 </div>
 
-</main>
-<footer style="text-align:center;padding:10px;">© 2026 Colmado El Ideal</footer>
+<div id="panel" class="hidden">
+<h4>Productos</h4>
+<div id="adminProducts"></div>
+
+<h4>Agregar / Editar</h4>
+<input id="pName" placeholder="Nombre">
+<input id="pPrice" placeholder="Precio">
+<input id="pImg" placeholder="URL imagen">
+<button onclick="saveProduct()">Guardar</button>
+</div>
+</div>
 
 <script>
-// ===== Datos del catálogo sincronizados con admin =====
-let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [];
-let pedido = JSON.parse(localStorage.getItem("pedido")) || [];
+const ADMIN_PASS = "2404";
 
-// ===== Función mostrar productos =====
-function mostrarProductos(filtro=""){
-  const cont=document.getElementById("productos");
-  cont.innerHTML="";
-  let productosFiltrados = catalogo.filter(p=>p.nombre.toLowerCase().includes(filtro.toLowerCase()));
-  if(productosFiltrados.length===0){
-    cont.innerHTML="<p>No se encontraron productos.</p>";
-    return;
-  }
-  productosFiltrados.forEach((p,i)=>{
-    const div=document.createElement("div");
-    div.className="product-card";
-    div.innerHTML=`
-      <img src="${p.imagen}" alt="${p.nombre}">
-      <div class="product-info">
-        <strong>${p.nombre} - RD$${p.precio}</strong>
-        ${p.disponible ? `
-        <div class="qty-controls">
-          <button onclick="cambiarCantidad(${i},-1)">-</button>
-          <input type="number" min="1" value="1" id="qty${i}">
-          <button onclick="cambiarCantidad(${i},1)">+</button>
-          <button onclick="agregarAlPedido(${i})">Agregar</button>
-        </div>` : `<span class="agotado">Agotado</span>`}
-      </div>
-    `;
-    cont.appendChild(div);
-  });
+let products = JSON.parse(localStorage.getItem("products")) || [
+ {id:1,name:"Arroz",price:50,img:"https://i.imgur.com/7QKJQyN.png"},
+ {id:2,name:"Aceite",price:150,img:"https://i.imgur.com/8mLk0aP.png"},
+ {id:3,name:"Habichuelas",price:80,img:"https://i.imgur.com/RW5XkqB.png"},
+ {id:4,name:"Azúcar",price:45,img:"https://i.imgur.com/m6Zs7pX.png"},
+ {id:5,name:"Leche",price:70,img:"https://i.imgur.com/NQjvYqg.png"}
+];
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveData(){
+ localStorage.setItem("products",JSON.stringify(products));
+ localStorage.setItem("cart",JSON.stringify(cart));
 }
 
-// ===== Funciones carrito =====
-function cambiarCantidad(i, delta){
-  const input=document.getElementById("qty"+i);
-  let val=parseInt(input.value);
-  val+=delta;
-  if(val<1) val=1;
-  input.value=val;
+function render(){
+ let pDiv=document.getElementById("products");
+ pDiv.innerHTML="";
+ let s=document.getElementById("search").value.toLowerCase();
+
+ products.filter(p=>p.name.toLowerCase().includes(s)).forEach(p=>{
+  let q=cart.find(i=>i.id==p.id)?.qty||0;
+  pDiv.innerHTML+=`
+  <div class="card">
+   <img src="${p.img}">
+   <b>${p.name}</b><br>$${p.price}
+   <div class="qty">
+    <button onclick="add(${p.id},-1)">−</button>
+    ${q}
+    <button onclick="add(${p.id},1)">+</button>
+   </div>
+  </div>`;
+ });
+
+ let cDiv=document.getElementById("cartItems");
+ cDiv.innerHTML="";
+ cart.forEach(i=>{
+  let p=products.find(p=>p.id==i.id);
+  cDiv.innerHTML+=`${p.name} x ${i.qty} <button onclick="remove(${i.id})">❌</button><br>`;
+ });
+
+ saveData();
+ renderAdmin();
 }
 
-function agregarAlPedido(i){
-  const p=catalogo[i];
-  const qty=parseInt(document.getElementById("qty"+i).value);
-  pedido.push({nombre:p.nombre, precio:p.precio, cantidad:qty, imagen:p.imagen});
-  localStorage.setItem("pedido", JSON.stringify(pedido));
-  actualizarPedido();
+function add(id,q){
+ let i=cart.find(x=>x.id==id);
+ if(!i && q>0) cart.push({id,qty:q});
+ else if(i){ i.qty+=q; if(i.qty<=0) cart=cart.filter(x=>x.id!=id);}
+ render();
 }
 
-function vaciarPedido(){
-  pedido=[];
-  localStorage.setItem("pedido", JSON.stringify(pedido));
-  actualizarPedido();
+function remove(id){ cart=cart.filter(x=>x.id!=id); render(); }
+function clearCart(){ cart=[]; render(); }
+
+function sendWhatsApp(){
+ let msg="Pedido:%0A";
+ cart.forEach(i=>{
+  let p=products.find(p=>p.id==i.id);
+  msg+=`${p.name} x ${i.qty}%0A`;
+ });
+ window.open("https://wa.me/18090000000?text="+msg);
 }
 
-function actualizarPedido(){
-  const vista=document.getElementById("vistaCarrito");
-  if(pedido.length===0){
-    document.getElementById("pedido").innerText="No hay productos agregados.";
-    vista.innerHTML="";
-    document.getElementById("enviar").href="#";
-    return;
-  }
-  let texto="", total=0;
-  vista.innerHTML="";
-  pedido.forEach(p=>{
-    texto+=`${p.cantidad} x ${p.nombre} = RD$${p.precio*p.cantidad}\n`;
-    total+=p.precio*p.cantidad;
-    const img=document.createElement("img");
-    img.src=p.imagen;
-    img.alt=p.nombre;
-    vista.appendChild(img);
-    vista.appendChild(document.createTextNode(`${p.cantidad} x ${p.nombre} = RD$${p.precio*p.cantidad}`));
-    vista.appendChild(document.createElement("br"));
-  });
-  texto+=`\nTotal: RD$${total}`;
-  document.getElementById("pedido").innerText=texto;
-  let mensaje=encodeURIComponent("Hola, quiero hacer este pedido:\n\n"+texto);
-  document.getElementById("enviar").href="https://wa.me/18296020646?text="+mensaje;
+function login(){
+ if(document.getElementById("pass").value===ADMIN_PASS){
+  localStorage.setItem("admin","ok");
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("panel").classList.remove("hidden");
+ } else alert("Clave incorrecta");
 }
 
-// ===== Buscador en tiempo real =====
-document.getElementById("buscador").addEventListener("input", function(){
-  mostrarProductos(this.value);
-});
+function renderAdmin(){
+ let a=document.getElementById("adminProducts");
+ if(!a) return;
+ a.innerHTML="";
+ products.forEach(p=>{
+  a.innerHTML+=`${p.name} ($${p.price})
+  <button onclick="edit(${p.id})">✏️</button>
+  <button onclick="del(${p.id})">🗑</button><br>`;
+ });
+}
 
-// ===== Inicializar =====
-mostrarProductos();
-actualizarPedido();
+function edit(id){
+ let p=products.find(x=>x.id==id);
+ pName.value=p.name; pPrice.value=p.price; pImg.value=p.img;
+ pName.dataset.id=id;
+}
+
+function del(id){ products=products.filter(x=>x.id!=id); render(); }
+
+function saveProduct(){
+ let id=pName.dataset.id;
+ if(id){
+  let p=products.find(x=>x.id==id);
+  p.name=pName.value; p.price=pPrice.value; p.img=pImg.value;
+ } else {
+  products.push({id:Date.now(),name:pName.value,price:pPrice.value,img:pImg.value});
+ }
+ pName.value=pPrice.value=pImg.value="";
+ pName.dataset.id="";
+ render();
+}
+
+if(localStorage.getItem("admin")=="ok"){
+ document.getElementById("login").classList.add("hidden");
+ document.getElementById("panel").classList.remove("hidden");
+}
+
+render();
 </script>
 
 </body>
