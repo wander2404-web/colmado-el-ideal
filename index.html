@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colmado El Ideal</title>
-  <meta name="description" content="Colmado El Ideal - Tu colmado de confianza, siempre cerca de ti.">
+  <meta name="description" content="Colmado El Ideal - Pedidos fáciles por WhatsApp.">
 
   <style>
     body {
@@ -14,7 +14,6 @@
       color: #333;
     }
 
-    /* LOGO GRANDE DE EXTREMO A EXTREMO */
     .hero {
       width: 100%;
       height: 65vh;
@@ -28,7 +27,7 @@
       background: linear-gradient(90deg, #f57c00, #ef6c00);
       color: white;
       text-align: center;
-      padding: 20px 15px;
+      padding: 20px;
     }
 
     main {
@@ -51,26 +50,39 @@
       margin-top: 0;
     }
 
-    .btn-whatsapp {
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .agotado {
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    .btn-whatsapp, .btn-llamar {
       display: inline-block;
-      background: #25D366;
-      color: white;
       padding: 14px 22px;
       border-radius: 10px;
       text-decoration: none;
       font-weight: bold;
       font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
     }
 
     .btn-llamar {
-      display: inline-block;
       background: #f57c00;
       color: white;
-      padding: 14px 22px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 16px;
     }
 
     footer {
@@ -84,35 +96,36 @@
 
 <body>
 
-  <!-- LOGO GRANDE -->
   <div class="hero"></div>
 
   <header>
     <h1>Colmado El Ideal</h1>
-    <p>Tu colmado de confianza</p>
+    <p>Pedidos rápidos por WhatsApp</p>
   </header>
 
   <main>
 
     <div class="card">
-      <h2>⏰ Horario</h2>
-      <p>Todos los días:<br><strong>7:00 a.m. – 12:00 a.m.</strong></p>
+      <h2>🛒 Productos disponibles</h2>
+      <ul>
+        <li>🥖 Pan</li>
+        <li>🥚 Huevos</li>
+        <li>🍚 Arroz</li>
+        <li>🧴 Aceite</li>
+        <li>🥤 Refrescos</li>
+        <li class="agotado">🍺 Cerveza (Agotado)</li>
+      </ul>
     </div>
 
     <div class="card">
-      <h2>📍 Ubicación</h2>
-      <p>Calle 18 de Noviembre, al lado de la escuela</p>
-      <p>República Dominicana</p>
-    </div>
+      <h2>📲 Haz tu pedido</h2>
+      <p>Escríbenos por WhatsApp y dinos qué productos deseas.</p>
 
-    <div class="card">
-      <h2>📲 Contáctanos</h2>
-
-      <a class="btn-whatsapp" href="https://wa.me/18296020646" target="_blank">
-        💬 Escribir por WhatsApp
+      <a class="btn-whatsapp" 
+         href="https://wa.me/18296020646?text=Hola%20quiero%20hacer%20un%20pedido%20del%20Colmado%20El%20Ideal"
+         target="_blank">
+        💬 Pedir por WhatsApp
       </a>
-
-      <br><br>
 
       <a class="btn-llamar" href="tel:8296020646">
         📞 Llamar ahora
