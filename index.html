@@ -1,6 +1,182 @@
-// Inicializar catálogo con productos de ejemplo si está vacío
-if(!localStorage.getItem("catalogo") || JSON.parse(localStorage.getItem("catalogo")).length===0){
-  const productosEjemplo = [
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colmado El Ideal - Catálogo</title>
+<style>
+/* BODY */
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#fff7ed;
+  color:#333;
+}
+
+/* HERO LOGO DE FONDO */
+.hero {
+  height:250px;
+  background: url("logo.png") center/contain no-repeat;
+  opacity:0.3;
+}
+
+/* HEADER */
+header{
+  background:#f57c00;
+  color:white;
+  text-align:center;
+  padding:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+/* MAIN */
+main{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
+
+/* CARDS */
+.card{
+  background:white;
+  padding:20px;
+  margin-bottom:20px;
+  border-radius:14px;
+  box-shadow:0 6px 15px rgba(0,0,0,.1);
+}
+
+/* TITULOS */
+h2{color:#ef6c00;}
+
+/* PRODUCTOS */
+.product-card{
+  display:flex;
+  align-items:center;
+  margin-bottom:15px;
+  border-bottom:1px solid #eee;
+  padding-bottom:10px;
+}
+.product-card img{
+  width:80px;
+  height:80px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-right:15px;
+}
+.product-info{flex:1;}
+.product-info strong{display:block;margin-bottom:5px;}
+
+/* CANTIDADES */
+.qty-controls{
+  display:flex;
+  align-items:center;
+  margin-top:5px;
+}
+.qty-controls button{
+  background:#f57c00;
+  border:none;
+  color:white;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.qty-controls input{
+  width:50px;
+  text-align:center;
+  margin:0 5px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  padding:4px;
+}
+
+/* PRODUCTO AGOTADO */
+.agotado{color:#999;text-decoration:line-through;}
+
+/* PEDIDO */
+#pedido{white-space:pre-line;background:#fff3e0;padding:15px;border-radius:10px;}
+#vistaCarrito{
+  background:#fff3e0;
+  padding:10px;
+  border-radius:10px;
+  margin-top:10px;
+}
+#vistaCarrito img{
+  width:50px;
+  height:50px;
+  object-fit:cover;
+  border-radius:6px;
+  margin-right:10px;
+  vertical-align:middle;
+}
+
+/* BOTONES */
+.btn{
+  display:inline-block;
+  margin-top:15px;
+  background:#25D366;
+  color:white;
+  padding:14px 22px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
+  transition:all .2s;
+}
+.btn:hover{opacity:.9;}
+button.vaciar{
+  background:#f44336;
+  color:white;
+  padding:10px 15px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  margin-top:10px;
+}
+button.quitar{
+  background:#f44336;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  margin-left:10px;
+  padding:3px 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="hero"></div>
+
+<header>
+<h1>Colmado El Ideal</h1>
+<p>Mini-tienda con pedidos por WhatsApp</p>
+</header>
+
+<main>
+
+<div class="card">
+<h2>🛒 Catálogo para clientes</h2>
+<div id="productos"></div>
+</div>
+
+<div class="card">
+<h2>📦 Tu pedido</h2>
+<div id="pedido">No hay productos agregados.</div>
+<div id="vistaCarrito"></div>
+<button class="vaciar" id="vaciarCarrito">🗑️ Vaciar carrito</button>
+<a class="btn" id="enviar" target="_blank">📲 Enviar pedido por WhatsApp</a>
+</div>
+
+</main>
+
+<footer>© 2026 Colmado El Ideal</footer>
+
+<script>
+// ===== DATOS DEL CATÁLOGO =====
+let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [];
+if(catalogo.length===0){
+  catalogo = [
     {nombre:"Coca-Cola 1.5L", precio:120, imagen:"https://i.imgur.com/1R1YFfV.jpg", disponible:true},
     {nombre:"Presidente 330ml", precio:80, imagen:"https://i.imgur.com/2o3dV7N.jpg", disponible:true},
     {nombre:"Pan de barra", precio:40, imagen:"https://i.imgur.com/Qc5v7lJ.jpg", disponible:true},
@@ -14,6 +190,115 @@ if(!localStorage.getItem("catalogo") || JSON.parse(localStorage.getItem("catalog
     {nombre:"Sal fina 1kg", precio:70, imagen:"https://i.imgur.com/mj1ZKfL.jpg", disponible:true},
     {nombre:"Panela 1kg", precio:90, imagen:"https://i.imgur.com/RsLqFQ8.jpg", disponible:true}
   ];
-  localStorage.setItem("catalogo", JSON.stringify(productosEjemplo));
-  catalogo = productosEjemplo;
+  localStorage.setItem("catalogo", JSON.stringify(catalogo));
 }
+
+// ===== PEDIDO =====
+let pedido = JSON.parse(localStorage.getItem("pedido")) || [];
+
+// ===== FUNCIONES =====
+function mostrarProductos(){
+  const cont=document.getElementById("productos");
+  cont.innerHTML="";
+  catalogo.forEach((p,i)=>{
+    const div=document.createElement("div");
+    div.className="product-card";
+    div.innerHTML=`
+      <img src="${p.imagen}" alt="${p.nombre}">
+      <div class="product-info">
+        <strong>${p.nombre} - RD$${p.precio}</strong>
+        ${p.disponible ? `
+        <div class="qty-controls">
+          <button onclick="cambiarCantidad(${i},-1)">-</button>
+          <input type="number" min="1" value="1" id="qty${i}">
+          <button onclick="cambiarCantidad(${i},1)">+</button>
+          <button onclick="agregarAlPedido(${i})">Agregar</button>
+        </div>` : `<span class="agotado">Agotado</span>`}
+      </div>
+    `;
+    cont.appendChild(div);
+  });
+}
+
+function cambiarCantidad(i, delta){
+  const input=document.getElementById("qty"+i);
+  let val=parseInt(input.value);
+  val+=delta;
+  if(val<1) val=1;
+  input.value=val;
+}
+
+function agregarAlPedido(i){
+  const p=catalogo[i];
+  const qty=parseInt(document.getElementById("qty"+i).value);
+  pedido.push({nombre:p.nombre, precio:p.precio, cantidad:qty, imagen:p.imagen});
+  localStorage.setItem("pedido", JSON.stringify(pedido));
+  actualizarPedido();
+}
+
+function actualizarPedido(){
+  const vista=document.getElementById("vistaCarrito");
+  if(pedido.length===0){
+    document.getElementById("pedido").innerText="No hay productos agregados.";
+    vista.innerHTML="";
+    document.getElementById("enviar").href="#";
+    return;
+  }
+  let texto="", total=0;
+  vista.innerHTML="";
+  pedido.forEach((p,i)=>{
+    texto+=`${p.cantidad} x ${p.nombre} = RD$${p.precio*p.cantidad}\n`;
+    total+=p.precio*p.cantidad;
+
+    const div=document.createElement("div");
+    div.style.marginBottom="5px";
+
+    const img=document.createElement("img");
+    img.src=p.imagen;
+    img.alt=p.nombre;
+    div.appendChild(img);
+
+    const span=document.createElement("span");
+    span.innerText=`${p.cantidad} x ${p.nombre} = RD$${p.precio*p.cantidad}`;
+    div.appendChild(span);
+
+    const btn=document.createElement("button");
+    btn.innerText="❌ Quitar";
+    btn.className="quitar";
+    btn.onclick=function(){ quitarProducto(i); };
+    div.appendChild(btn);
+
+    vista.appendChild(div);
+  });
+
+  texto+=`\nTotal: RD$${total}`;
+  document.getElementById("pedido").innerText=texto;
+  let mensaje=encodeURIComponent("Hola, quiero hacer este pedido:\n\n"+texto);
+  document.getElementById("enviar").href="https://wa.me/18296020646?text="+mensaje;
+}
+
+function quitarProducto(indice){
+  pedido.splice(indice,1);
+  localStorage.setItem("pedido", JSON.stringify(pedido));
+  actualizarPedido();
+}
+
+document.getElementById("vaciarCarrito").addEventListener("click", function(){
+  if(pedido.length === 0){
+    alert("El carrito ya está vacío.");
+    return;
+  }
+  if(confirm("¿Seguro que quieres vaciar todo el carrito?")){
+    pedido = [];
+    localStorage.setItem("pedido", JSON.stringify(pedido));
+    actualizarPedido();
+  }
+});
+
+// ===== INICIALIZAR =====
+mostrarProductos();
+actualizarPedido();
+</script>
+
+</body>
+</html>
