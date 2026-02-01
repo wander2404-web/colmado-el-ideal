@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colmado El Ideal - Mini tienda con imágenes locales</title>
+<title>Colmado El Ideal - Mini tienda con carrito</title>
 <style>
 body{
   margin:0;
@@ -87,6 +87,20 @@ h2{color:#ef6c00;}
   padding:15px;
   border-radius:10px;
 }
+#vistaCarrito{
+  background:#fff3e0;
+  padding:10px;
+  border-radius:10px;
+  margin-top:10px;
+}
+#vistaCarrito img{
+  width:50px;
+  height:50px;
+  object-fit:cover;
+  border-radius:6px;
+  margin-right:10px;
+  vertical-align:middle;
+}
 .btn{
   display:inline-block;
   margin-top:15px;
@@ -118,7 +132,7 @@ h2{color:#ef6c00;}
 <div class="hero"></div>
 <header>
 <h1>Colmado El Ideal</h1>
-<p>Mini-tienda con subida de imágenes desde tu dispositivo</p>
+<p>Mini-tienda con vista previa del carrito</p>
 </header>
 
 <main>
@@ -131,41 +145,4 @@ h2{color:#ef6c00;}
   <input type="number" id="precioProd" placeholder="Precio">
   <input type="file" id="imagenLocal" accept="image/*">
   <select id="disponibleProd">
-    <option value="true">Disponible</option>
-    <option value="false">Agotado</option>
-  </select>
-  <button onclick="guardarProducto()">Guardar cambios</button>
-  <button onclick="agregarProducto()">Agregar nuevo producto</button>
-</div>
-</div>
-
-<div class="card">
-<h2>🛒 Catálogo para clientes</h2>
-<div id="productos"></div>
-</div>
-
-<div class="card">
-<h2>📦 Tu pedido</h2>
-<div id="pedido">No hay productos agregados.</div>
-<a class="btn" id="enviar" target="_blank">📲 Enviar pedido por WhatsApp</a>
-</div>
-
-</main>
-<footer>© 2026 Colmado El Ideal</footer>
-
-<script>
-// Datos iniciales
-let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [
-  {nombre:"Pan", precio:20, imagen:"https://i.imgur.com/Lf6wq3X.png", disponible:true},
-  {nombre:"Huevos", precio:15, imagen:"https://i.imgur.com/3iYv1F0.png", disponible:true},
-  {nombre:"Refresco", precio:50, imagen:"https://i.imgur.com/jY7jWqZ.png", disponible:true},
-  {nombre:"Cerveza", precio:80, imagen:"https://i.imgur.com/7w5e7Zy.png", disponible:false}
-];
-
-let pedido = JSON.parse(localStorage.getItem("pedido")) || [];
-
-// Mostrar catálogo
-function mostrarProductos(){
-  const cont=document.getElementById("productos");
-  cont.innerHTML="";
-  catalogo.forEach((p,i)=>{
+    <option value="tru
