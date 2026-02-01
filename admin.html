@@ -5,112 +5,132 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Colmado El Ideal - Admin</title>
 <style>
-body {margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff7ed;color:#333;}
-header {background:#f57c00;color:white;text-align:center;padding:20px;}
-main {max-width:1000px;margin:auto;padding:20px;}
-.card {background:white;padding:20px;margin-bottom:20px;border-radius:14px;box-shadow:0 6px 15px rgba(0,0,0,.1);}
-#panelEdicion input,#panelEdicion select,#panelEdicion button {width:100%;margin:5px 0;padding:8px;border-radius:6px;border:1px solid #ccc;}
-#panelEdicion button {background:#f57c00;color:white;border:none;cursor:pointer;font-weight:bold;}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff7ed;color:#333;}
+header{background:#f57c00;color:white;text-align:center;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,.2);}
+main{max-width:1000px;margin:auto;padding:20px;}
+.card{background:white;padding:20px;margin-bottom:20px;border-radius:14px;box-shadow:0 6px 15px rgba(0,0,0,.1);}
+h2{color:#ef6c00;}
+input,button,select{padding:6px;margin:3px;border-radius:6px;border:1px solid #ccc;}
+button{background:#f57c00;color:white;border:none;cursor:pointer;font-weight:bold;}
+.product-item{display:flex;align-items:center;margin-bottom:10px;}
+.product-item img{width:50px;height:50px;object-fit:cover;border-radius:6px;margin-right:10px;}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Colmado El Ideal - Administración</h1>
+<h1>Panel Admin - Colmado El Ideal</h1>
+<p>Solo usuarios autorizados pueden editar productos</p>
 </header>
 
-<main>
+<main id="panel" style="display:none;">
 
 <div class="card">
-  <h2>🔒 Login</h2>
-  <input type="password" id="pass" placeholder="Introduce contraseña">
-  <button onclick="login()">Entrar</button>
-</div>
+<h2>🛠 Panel de edición de productos</h2>
+<div id="productosAdmin"></div>
 
-<div class="card" id="panelEdicion" style="display:none;">
-  <h2>🛠 Panel de edición de productos</h2>
-  <select id="productoSelect"></select>
-  <input type="text" id="nombreProd" placeholder="Nombre del producto">
-  <input type="number" id="precioProd" placeholder="Precio">
-  <input type="file" id="imagenLocal" accept="image/*">
-  <select id="disponibleProd">
-    <option value="true">Disponible</option>
-    <option value="false">Agotado</option>
-  </select>
-  <button onclick="guardarProducto()">Guardar cambios</button>
-  <button onclick="agregarProducto()">Agregar nuevo producto</button>
+<h3>Agregar nuevo producto</h3>
+<input type="text" id="nuevoNombre" placeholder="Nombre del producto">
+<input type="number" id="nuevoPrecio" placeholder="Precio" min="0">
+<input type="text" id="nuevoImagen" placeholder="URL de imagen">
+<select id="nuevoDisponible">
+  <option value="true">Disponible</option>
+  <option value="false">Agotado</option>
+</select>
+<button onclick="agregarProducto()">Agregar producto</button>
+
+<button onclick="cargarEjemplo()">🔄 Cargar catálogo de ejemplo</button>
 </div>
 
 </main>
 
 <script>
-const PASSWORD="TuClave123"; // Cambia aquí la contraseña
-
-function login(){
-  const pass=document.getElementById("pass").value;
-  if(pass===PASSWORD){
-    document.getElementById("panelEdicion").style.display="block";
-    alert("Acceso concedido");
-    cargarCatalogo();
-  } else {
-    alert("Contraseña incorrecta");
-  }
+// ===== Contraseña =====
+let clave = prompt("Introduce la contraseña de admin:");
+if(clave !== "123"){
+  alert("Clave incorrecta. No tienes acceso.");
+  document.body.innerHTML="<h2 style='text-align:center;margin-top:50px;'>Acceso denegado</h2>";
 }
 
+// ===== Datos del catálogo =====
 let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [];
 
-function cargarCatalogo(){ actualizarSelect(); }
-
-function actualizarSelect(){
-  const select=document.getElementById("productoSelect");
-  select.innerHTML="";
-  catalogo.forEach((p,i)=>{
-    const opt=document.createElement("option");
-    opt.value=i;
-    opt.text=p.nombre;
-    select.appendChild(opt);
-  });
-  if(catalogo.length>0) cargarProducto();
+function cargarEjemplo(){
+  catalogo = [
+    {nombre:"Coca-Cola 1.5L", precio:120, imagen:"https://i.imgur.com/1R1YFfV.jpg", disponible:true},
+    {nombre:"Presidente 330ml", precio:80, imagen:"https://i.imgur.com/2o3dV7N.jpg", disponible:true},
+    {nombre:"Pan de barra", precio:40, imagen:"https://i.imgur.com/Qc5v7lJ.jpg", disponible:true},
+    {nombre:"Huevos x12", precio:150, imagen:"https://i.imgur.com/Xd9J5YU.jpg", disponible:true},
+    {nombre:"Arroz 1kg", precio:100, imagen:"https://i.imgur.com/7a4l2jE.jpg", disponible:true},
+    {nombre:"Aceite vegetal 1L", precio:180, imagen:"https://i.imgur.com/yzpXzTJ.jpg", disponible:true},
+    {nombre:"Leche Laive 1L", precio:90, imagen:"https://i.imgur.com/3XmjJh1.jpg", disponible:true},
+    {nombre:"Galletas Noel", precio:50, imagen:"https://i.imgur.com/0yf1h2C.jpg", disponible:true},
+    {nombre:"Café 250g", precio:200, imagen:"https://i.imgur.com/Nn1vFZo.jpg", disponible:true},
+    {nombre:"Azúcar 1kg", precio:80, imagen:"https://i.imgur.com/8yC3Q3y.jpg", disponible:true},
+    {nombre:"Sal fina 1kg", precio:70, imagen:"https://i.imgur.com/mj1ZKfL.jpg", disponible:true},
+    {nombre:"Panela 1kg", precio:90, imagen:"https://i.imgur.com/RsLqFQ8.jpg", disponible:true}
+  ];
+  localStorage.setItem("catalogo", JSON.stringify(catalogo));
+  mostrarAdmin();
 }
 
-function cargarProducto(){
-  const i=document.getElementById("productoSelect").value;
-  const p=catalogo[i];
-  document.getElementById("nombreProd").value=p.nombre;
-  document.getElementById("precioProd").value=p.precio;
-  document.getElementById("imagenLocal").value="";
-  document.getElementById("disponibleProd").value=p.disponible;
-}
-
-function guardarProducto(){
-  const i=document.getElementById("productoSelect").value;
-  const nombre=document.getElementById("nombreProd").value;
-  const precio=parseInt(document.getElementById("precioProd").value);
-  const disponible=document.getElementById("disponibleProd").value==="true";
-
-  const fileInput=document.getElementById("imagenLocal");
-  if(fileInput.files && fileInput.files[0]){
-    const reader=new FileReader();
-    reader.onload=function(e){
-      catalogo[i]={nombre, precio, imagen:e.target.result, disponible};
-      localStorage.setItem("catalogo", JSON.stringify(catalogo));
-      actualizarSelect();
-    }
-    reader.readAsDataURL(fileInput.files[0]);
-  } else {
-    catalogo[i]={nombre, precio, imagen:catalogo[i].imagen, disponible};
-    localStorage.setItem("catalogo", JSON.stringify(catalogo));
-    actualizarSelect();
+// ===== Mostrar productos en el panel =====
+function mostrarAdmin(){
+  const cont=document.getElementById("productosAdmin");
+  cont.innerHTML="";
+  if(catalogo.length===0){
+    cont.innerHTML="<p>No hay productos en el catálogo. Usa 'Cargar catálogo de ejemplo' o agrega uno nuevo.</p>";
+    return;
   }
+  catalogo.forEach((p,i)=>{
+    const div=document.createElement("div");
+    div.className="product-item";
+    div.innerHTML=`
+      <img src="${p.imagen}" alt="${p.nombre}">
+      <input type="text" value="${p.nombre}" onchange="editarProducto(${i},'nombre',this.value)">
+      <input type="number" value="${p.precio}" onchange="editarProducto(${i},'precio',this.value)">
+      <input type="text" value="${p.imagen}" onchange="editarProducto(${i},'imagen',this.value)">
+      <select onchange="editarProducto(${i},'disponible',this.value)">
+        <option value="true" ${p.disponible?'selected':''}>Disponible</option>
+        <option value="false" ${!p.disponible?'selected':''}>Agotado</option>
+      </select>
+      <button onclick="eliminarProducto(${i})">Eliminar</button>
+    `;
+    cont.appendChild(div);
+  });
+  localStorage.setItem("catalogo", JSON.stringify(catalogo));
+}
+
+// ===== Funciones editar, eliminar y agregar =====
+function editarProducto(i,campo,valor){
+  if(campo==="precio") valor=parseInt(valor);
+  if(campo==="disponible") valor=(valor==="true");
+  catalogo[i][campo]=valor;
+  localStorage.setItem("catalogo", JSON.stringify(catalogo));
+}
+
+function eliminarProducto(i){
+  catalogo.splice(i,1);
+  mostrarAdmin();
 }
 
 function agregarProducto(){
-  catalogo.push({nombre:"Nuevo producto", precio:0, imagen:"", disponible:true});
-  localStorage.setItem("catalogo", JSON.stringify(catalogo));
-  actualizarSelect();
+  const nombre=document.getElementById("nuevoNombre").value;
+  const precio=parseInt(document.getElementById("nuevoPrecio").value);
+  const imagen=document.getElementById("nuevoImagen").value || "https://via.placeholder.com/80";
+  const disponible=document.getElementById("nuevoDisponible").value==="true";
+  if(nombre && precio){
+    catalogo.push({nombre,precio,imagen,disponible});
+    document.getElementById("nuevoNombre").value="";
+    document.getElementById("nuevoPrecio").value="";
+    document.getElementById("nuevoImagen").value="";
+    mostrarAdmin();
+  }
 }
 
-document.getElementById("productoSelect").addEventListener("change", cargarProducto);
+// ===== Inicializar =====
+document.getElementById("panel").style.display="block";
+mostrarAdmin();
 </script>
 
 </body>
