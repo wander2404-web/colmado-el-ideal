@@ -45,11 +45,16 @@ button{background:#f57c00;color:white;border:none;cursor:pointer;font-weight:bol
 </main>
 
 <script>
-// ===== Contraseña =====
-let clave = prompt("Introduce la contraseña de admin:");
-if(clave !== "123"){
-  alert("Clave incorrecta. No tienes acceso.");
-  document.body.innerHTML="<h2 style='text-align:center;margin-top:50px;'>Acceso denegado</h2>";
+// ===== Contraseña con recordatorio =====
+const CLAVE_ADMIN = "2404";
+if(localStorage.getItem("adminAccess") !== CLAVE_ADMIN){
+  let clave = prompt("Introduce la contraseña de admin:");
+  if(clave !== CLAVE_ADMIN){
+    alert("Clave incorrecta. No tienes acceso.");
+    document.body.innerHTML="<h2 style='text-align:center;margin-top:50px;'>Acceso denegado</h2>";
+  } else {
+    localStorage.setItem("adminAccess", CLAVE_ADMIN);
+  }
 }
 
 // ===== Datos del catálogo =====
@@ -66,9 +71,7 @@ function cargarEjemplo(){
     {nombre:"Leche Laive 1L", precio:90, imagen:"https://i.imgur.com/3XmjJh1.jpg", disponible:true},
     {nombre:"Galletas Noel", precio:50, imagen:"https://i.imgur.com/0yf1h2C.jpg", disponible:true},
     {nombre:"Café 250g", precio:200, imagen:"https://i.imgur.com/Nn1vFZo.jpg", disponible:true},
-    {nombre:"Azúcar 1kg", precio:80, imagen:"https://i.imgur.com/8yC3Q3y.jpg", disponible:true},
-    {nombre:"Sal fina 1kg", precio:70, imagen:"https://i.imgur.com/mj1ZKfL.jpg", disponible:true},
-    {nombre:"Panela 1kg", precio:90, imagen:"https://i.imgur.com/RsLqFQ8.jpg", disponible:true}
+    {nombre:"Azúcar 1kg", precio:80, imagen:"https://i.imgur.com/8yC3Q3y.jpg", disponible:true}
   ];
   localStorage.setItem("catalogo", JSON.stringify(catalogo));
   mostrarAdmin();
