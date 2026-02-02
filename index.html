@@ -1,115 +1,150 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colmado El Ideal</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colmado El Ideal</title>
 
-<style>
-body{margin:0;font-family:Arial;background:#fff7ed}
-header{background:#f57c00;color:white;text-align:center;padding:15px;position:sticky;top:0}
-header img{width:90px;margin-bottom:5px}
-main{max-width:1000px;margin:auto;padding:15px}
-.card{background:white;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 4px 10px rgba(0,0,0,.1)}
-.product{display:flex;align-items:center;border-bottom:1px solid #eee;padding:10px 0}
-.product img{width:70px;height:70px;border-radius:8px;margin-right:10px}
-.qty button{background:#f57c00;color:white;border:none;padding:5px 10px;border-radius:5px}
-.buscar{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px}
-.btn{background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;display:inline-block;margin-top:10px}
-</style>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f6f6f6;
+    }
+
+    header {
+      background: #f57c00;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+
+    .producto {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .producto strong {
+      font-size: 16px;
+    }
+
+    .precio {
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    button {
+      background: #25D366;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    footer {
+      background: #222;
+      color: #ccc;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-<img src="logotipo.png" alt="Colmado El Ideal">
-<h2>Colmado El Ideal</h2>
-<p>Pedidos por WhatsApp</p>
+  <h1>Colmado El Ideal</h1>
+  <p>Pedidos por WhatsApp</p>
 </header>
 
-<main>
+<div class="container">
 
-<input class="buscar" placeholder="🔍 Buscar producto..." onkeyup="buscar(this.value)">
+  <div class="card">
+    <h2>⏰ Horario</h2>
+    <p>Todos los días: <strong>7:00 a.m. – 12:00 a.m.</strong></p>
+  </div>
 
-<div class="card">
-<h3>🛒 Productos</h3>
-<div id="productos"></div>
+  <div class="card">
+    <h2>📍 Ubicación</h2>
+    <p>Calle 18 de Noviembre, al lado de la escuela</p>
+    <p>República Dominicana</p>
+  </div>
+
+  <div class="card">
+    <h2>🛒 Productos</h2>
+
+    <div class="producto">
+      <div>
+        <strong>Coca-Cola 1.5L</strong><br>
+        <span class="precio">RD$120</span>
+      </div>
+      <button onclick="enviarPedido('Coca-Cola 1.5L - RD$120')">+</button>
+    </div>
+    <hr>
+
+    <div class="producto">
+      <div>
+        <strong>Presidente 330ml</strong><br>
+        <span class="precio">RD$80</span>
+      </div>
+      <button onclick="enviarPedido('Presidente 330ml - RD$80')">+</button>
+    </div>
+    <hr>
+
+    <div class="producto">
+      <div>
+        <strong>Pan de barra</strong><br>
+        <span class="precio">RD$40</span>
+      </div>
+      <button onclick="enviarPedido('Pan de barra - RD$40')">+</button>
+    </div>
+    <hr>
+
+    <div class="producto">
+      <div>
+        <strong>Huevos x12</strong><br>
+        <span class="precio">RD$150</span>
+      </div>
+      <button onclick="enviarPedido('Huevos x12 - RD$150')">+</button>
+    </div>
+
+  </div>
+
 </div>
 
-<div class="card">
-<h3>📦 Tu carrito</h3>
-<div id="carrito">Carrito vacío</div>
-<button onclick="vaciarCarrito()">🗑 Vaciar carrito</button><br>
-<a id="enviar" class="btn" target="_blank">📲 Enviar pedido</a>
-</div>
-
-</main>
+<footer>
+  © 2026 Colmado El Ideal · Todos los derechos reservados
+</footer>
 
 <script>
-let catalogo = JSON.parse(localStorage.getItem("catalogo")) || [
-{nombre:"Arroz 5lb",precio:150,img:"https://via.placeholder.com/80"},
-{nombre:"Aceite 1L",precio:200,img:"https://via.placeholder.com/80"},
-{nombre:"Azúcar",precio:70,img:"https://via.placeholder.com/80"},
-{nombre:"Sal",precio:40,img:"https://via.placeholder.com/80"},
-{nombre:"Huevos",precio:10,img:"https://via.placeholder.com/80"},
-{nombre:"Pan sobao",precio:25,img:"https://via.placeholder.com/80"},
-{nombre:"Refresco 2L",precio:120,img:"https://via.placeholder.com/80"}
-];
-
-let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
-function mostrarProductos(lista=catalogo){
-productos.innerHTML="";
-lista.forEach((p,i)=>{
-productos.innerHTML+=`
-<div class="product">
-<img src="${p.img}">
-<div style="flex:1">
-<b>${p.nombre}</b><br>RD$${p.precio}
-</div>
-<div class="qty">
-<button onclick="agregar(${i})">+</button>
-</div>
-</div>`;
-});
-}
-
-function agregar(i){
-carrito.push(catalogo[i]);
-localStorage.setItem("carrito",JSON.stringify(carrito));
-mostrarCarrito();
-}
-
-function mostrarCarrito(){
-if(carrito.length===0){
-carritoDiv.innerHTML="Carrito vacío";
-enviar.href="#";
-return;
-}
-let texto="", total=0;
-carrito.forEach((p,i)=>{
-texto+=`${p.nombre} RD$${p.precio}\n`;
-total+=p.precio;
-});
-carritoDiv.innerText=texto + "\nTotal RD$"+total;
-enviar.href="https://wa.me/18296020646?text="+encodeURIComponent("Hola, quiero pedir:\n\n"+texto+"\nTotal RD$"+total);
-}
-
-function vaciarCarrito(){
-carrito=[];
-localStorage.removeItem("carrito");
-mostrarCarrito();
-}
-
-function buscar(t){
-mostrarProductos(catalogo.filter(p=>p.nombre.toLowerCase().includes(t.toLowerCase())));
-}
-
-const carritoDiv=document.getElementById("carrito");
-const enviar=document.getElementById("enviar");
-
-mostrarProductos();
-mostrarCarrito();
+  function enviarPedido(producto) {
+    const telefono = "18296020646";
+    const mensaje = encodeURIComponent("Hola, quiero pedir:\n" + producto);
+    window.open(`https://wa.me/${telefono}?text=${mensaje}`, "_blank");
+  }
 </script>
 
 </body>
