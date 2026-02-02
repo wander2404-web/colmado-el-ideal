@@ -1,172 +1,51 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Colmado El Ideal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fff5eb;
-    }
-
-    header {
-      background: #f57c00;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    header img {
-      width: 80px;
-      margin-bottom: 10px;
-    }
-
-    header h1 {
-      margin: 5px 0;
-    }
-
-    header p {
-      margin: 0;
-      font-size: 14px;
-    }
-
-    .container {
-      padding: 15px;
-    }
-
-    .search-box {
-      display: flex;
-      align-items: center;
-      background: white;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 15px;
-    }
-
-    .search-box input {
-      border: none;
-      outline: none;
-      width: 100%;
-      font-size: 16px;
-    }
-
-    .product {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .product-info h3 {
-      margin: 0;
-      font-size: 16px;
-    }
-
-    .product-info p {
-      margin: 3px 0 0;
-      color: #555;
-    }
-
-    .add-btn {
-      background: #f57c00;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      width: 35px;
-      height: 35px;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .add-btn:hover {
-      background: #e06900;
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-  <img src="logo.png" alt="Colmado El Ideal">
-  <h1>Colmado El Ideal</h1>
-  <p>Pedidos por WhatsApp</p>
-</header>
-
-<div class="container">
-
-  <!-- LUPA / BUSCADOR -->
-  <div class="search-box">
-    🔍
-    <input type="text" id="search" placeholder="Buscar producto..." onkeyup="filterProducts()">
-  </div>
-
-  <!-- PRODUCTOS -->
-  <div class="product" data-name="coca cola">
-    <div class="product-info">
-      <h3>Coca-Cola 1.5L</h3>
-      <p>RD$120</p>
-    </div>
-    <button class="add-btn" onclick="order('Coca-Cola 1.5L')">+</button>
-  </div>
-
-  <div class="product" data-name="presidente cerveza">
-    <div class="product-info">
-      <h3>Presidente 330ml</h3>
-      <p>RD$80</p>
-    </div>
-    <button class="add-btn" onclick="order('Presidente 330ml')">+</button>
-  </div>
-
-  <div class="product" data-name="pan">
-    <div class="product-info">
-      <h3>Pan de barra</h3>
-      <p>RD$40</p>
-    </div>
-    <button class="add-btn" onclick="order('Pan de barra')">+</button>
-  </div>
-
-  <div class="product" data-name="huevos">
-    <div class="product-info">
-      <h3>Huevos x12</h3>
-      <p>RD$150</p>
-    </div>
-    <button class="add-btn" onclick="order('Huevos x12')">+</button>
-  </div>
-
-  <div class="product" data-name="arroz">
-    <div class="product-info">
-      <h3>Arroz 1 kg</h3>
-      <p>RD$100</p>
-    </div>
-    <button class="add-btn" onclick="order('Arroz 1 kg')">+</button>
-  </div>
-
-</div>
-
-<script>
-  function order(product) {
-    const phone = "1829XXXXXXX"; // pon aquí tu número
-    const message = `Hola, quiero pedir: ${product}`;
-    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
   }
 
-  function filterProducts() {
-    const input = document.getElementById("search").value.toLowerCase();
-    const products = document.querySelectorAll(".product");
-
-    products.forEach(product => {
-      const name = product.dataset.name;
-      product.style.display = name.includes(input) ? "flex" : "none";
-    });
+  /* HEADER */
+  header {
+    width: 100%;
+    background: #f57c00;
+    color: white;
+    display: flex;
+    justify-content: center;
   }
-</script>
 
-</body>
-</html>
+  .header-content {
+    max-width: 900px;
+    width: 100%;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-content img {
+    width: 90px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  .header-content h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  .header-content p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    opacity: 0.95;
+  }
+
+  /* separación clara con el contenido */
+  .container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px 15px;
+  }
+</style>
