@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colmado El Ideal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f6f6f6;
+      font-family: Arial, sans-serif;
+      background: #fff5eb;
     }
 
     header {
@@ -19,56 +19,73 @@
       text-align: center;
     }
 
+    header img {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+
     header h1 {
+      margin: 5px 0;
+    }
+
+    header p {
       margin: 0;
+      font-size: 14px;
     }
 
     .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
+      padding: 15px;
     }
 
-    .card {
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    .product {
       background: white;
       border-radius: 10px;
       padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    }
-
-    .producto {
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .producto strong {
+    .product-info h3 {
+      margin: 0;
       font-size: 16px;
     }
 
-    .precio {
-      color: #2e7d32;
-      font-weight: bold;
+    .product-info p {
+      margin: 3px 0 0;
+      color: #555;
     }
 
-    button {
-      background: #25D366;
-      border: none;
+    .add-btn {
+      background: #f57c00;
       color: white;
-      padding: 8px 12px;
-      border-radius: 6px;
+      border: none;
+      border-radius: 8px;
+      width: 35px;
+      height: 35px;
+      font-size: 20px;
       cursor: pointer;
-      font-size: 16px;
     }
 
-    footer {
-      background: #222;
-      color: #ccc;
-      text-align: center;
-      padding: 15px;
-      font-size: 14px;
-      margin-top: 20px;
+    .add-btn:hover {
+      background: #e06900;
     }
   </style>
 </head>
@@ -76,74 +93,78 @@
 <body>
 
 <header>
+  <img src="logo.png" alt="Colmado El Ideal">
   <h1>Colmado El Ideal</h1>
   <p>Pedidos por WhatsApp</p>
 </header>
 
 <div class="container">
 
-  <div class="card">
-    <h2>⏰ Horario</h2>
-    <p>Todos los días: <strong>7:00 a.m. – 12:00 a.m.</strong></p>
+  <!-- LUPA / BUSCADOR -->
+  <div class="search-box">
+    🔍
+    <input type="text" id="search" placeholder="Buscar producto..." onkeyup="filterProducts()">
   </div>
 
-  <div class="card">
-    <h2>📍 Ubicación</h2>
-    <p>Calle 18 de Noviembre, al lado de la escuela</p>
-    <p>República Dominicana</p>
+  <!-- PRODUCTOS -->
+  <div class="product" data-name="coca cola">
+    <div class="product-info">
+      <h3>Coca-Cola 1.5L</h3>
+      <p>RD$120</p>
+    </div>
+    <button class="add-btn" onclick="order('Coca-Cola 1.5L')">+</button>
   </div>
 
-  <div class="card">
-    <h2>🛒 Productos</h2>
-
-    <div class="producto">
-      <div>
-        <strong>Coca-Cola 1.5L</strong><br>
-        <span class="precio">RD$120</span>
-      </div>
-      <button onclick="enviarPedido('Coca-Cola 1.5L - RD$120')">+</button>
+  <div class="product" data-name="presidente cerveza">
+    <div class="product-info">
+      <h3>Presidente 330ml</h3>
+      <p>RD$80</p>
     </div>
-    <hr>
+    <button class="add-btn" onclick="order('Presidente 330ml')">+</button>
+  </div>
 
-    <div class="producto">
-      <div>
-        <strong>Presidente 330ml</strong><br>
-        <span class="precio">RD$80</span>
-      </div>
-      <button onclick="enviarPedido('Presidente 330ml - RD$80')">+</button>
+  <div class="product" data-name="pan">
+    <div class="product-info">
+      <h3>Pan de barra</h3>
+      <p>RD$40</p>
     </div>
-    <hr>
+    <button class="add-btn" onclick="order('Pan de barra')">+</button>
+  </div>
 
-    <div class="producto">
-      <div>
-        <strong>Pan de barra</strong><br>
-        <span class="precio">RD$40</span>
-      </div>
-      <button onclick="enviarPedido('Pan de barra - RD$40')">+</button>
+  <div class="product" data-name="huevos">
+    <div class="product-info">
+      <h3>Huevos x12</h3>
+      <p>RD$150</p>
     </div>
-    <hr>
+    <button class="add-btn" onclick="order('Huevos x12')">+</button>
+  </div>
 
-    <div class="producto">
-      <div>
-        <strong>Huevos x12</strong><br>
-        <span class="precio">RD$150</span>
-      </div>
-      <button onclick="enviarPedido('Huevos x12 - RD$150')">+</button>
+  <div class="product" data-name="arroz">
+    <div class="product-info">
+      <h3>Arroz 1 kg</h3>
+      <p>RD$100</p>
     </div>
-
+    <button class="add-btn" onclick="order('Arroz 1 kg')">+</button>
   </div>
 
 </div>
 
-<footer>
-  © 2026 Colmado El Ideal · Todos los derechos reservados
-</footer>
-
 <script>
-  function enviarPedido(producto) {
-    const telefono = "18296020646";
-    const mensaje = encodeURIComponent("Hola, quiero pedir:\n" + producto);
-    window.open(`https://wa.me/${telefono}?text=${mensaje}`, "_blank");
+  function order(product) {
+    const phone = "1829XXXXXXX"; // pon aquí tu número
+    const message = `Hola, quiero pedir: ${product}`;
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+
+  function filterProducts() {
+    const input = document.getElementById("search").value.toLowerCase();
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(product => {
+      const name = product.dataset.name;
+      product.style.display = name.includes(input) ? "flex" : "none";
+    });
   }
 </script>
 
