@@ -2,255 +2,268 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Colmado El Ideal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f5f5f5;
+:root {
+  --bg:#f4f4f4;
+  --card:#fff;
+  --text:#000;
+  --main:#f57c00;
 }
 
-/* BARRA SUPERIOR */
-.top-bar{
-  background:#222;
-  color:#fff;
-  font-size:13px;
+.dark {
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#fff;
 }
-.top-bar div{
-  max-width:1200px;
-  margin:auto;
-  padding:6px 10px;
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
+
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 
 /* HEADER */
-header{
-  background:#f57c00;
+header {
+  background:var(--main);
+  color:#fff;
+  padding:15px;
 }
-.header-content{
+
+.header {
   max-width:1200px;
   margin:auto;
-  padding:10px;
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  align-items:center;
   gap:10px;
 }
 
-/* MARCA */
-.brand{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.brand img{
-  width:55px;
-  height:55px;
-  object-fit:contain;
-}
-.brand h1{
-  margin:0;
-  font-size:18px;
-  color:#fff;
-}
-
-/* HERRAMIENTAS */
-.tools{
+.logo {
   display:flex;
   align-items:center;
   gap:10px;
 }
-.tools input{
-  padding:6px 8px;
+
+.logo img {
+  width:70px;
+}
+
+.search input {
+  padding:8px;
+  border-radius:20px;
   border:none;
-  border-radius:6px;
-  width:140px;
 }
-.cart{
-  font-size:18px;
+
+.cart-btn, .dark-btn {
   cursor:pointer;
-  color:#fff;
+  font-size:18px;
 }
 
 /* CONTENEDOR */
-.container{
+.container {
   max-width:1200px;
   margin:auto;
-  padding:10px;
+  padding:15px;
 }
 
-/* PRODUCTOS – 3 COLUMNAS */
-.products{
+.products {
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:10px;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:15px;
 }
 
-.product{
-  background:white;
-  border-radius:8px;
-  padding:8px;
+.product {
+  background:var(--card);
+  border-radius:10px;
+  padding:10px;
   text-align:center;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
 }
 
-.product img{
+.product img {
   width:100%;
-  height:80px;
+  height:130px;
   object-fit:contain;
 }
 
-.product h4{
-  font-size:13px;
-  margin:6px 0 4px;
+.controls {
+  display:flex;
+  justify-content:center;
+  gap:10px;
 }
 
-.product button{
-  padding:5px;
-  font-size:12px;
-  border:none;
-  border-radius:6px;
-  background:#25D366;
-  color:white;
+button {
   cursor:pointer;
 }
 
-/* CARRITO PANEL */
-#cartPanel{
+/* CARRITO */
+#cart {
   position:fixed;
+  right:0;
   top:0;
-  right:-100%;
-  width:280px;
+  width:320px;
   height:100%;
-  background:white;
-  box-shadow:-4px 0 10px rgba(0,0,0,.2);
+  background:var(--card);
+  box-shadow:-3px 0 10px rgba(0,0,0,.3);
   padding:15px;
-  transition:.3s;
-  z-index:50;
+  display:none;
   overflow:auto;
 }
-#cartPanel.open{
-  right:0;
-}
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  font-size:14px;
-  margin-bottom:8px;
+
+/* ADMIN */
+.admin {
+  margin:20px 0;
+  background:var(--card);
+  padding:10px;
+  border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- BARRA INFO -->
-<div class="top-bar">
-  <div>
-    <span>⏰ 7:00 a.m. – 12:00 a.m.</span>
-    <span>📍 Calle 18 de Noviembre</span>
-    <span>📲 Pedidos por WhatsApp</span>
-  </div>
-</div>
-
-<!-- HEADER -->
 <header>
-  <div class="header-content">
-    <div class="brand">
-      <img src="logo.png" alt="Colmado El Ideal">
-      <h1>Colmado El Ideal</h1>
+  <div class="header">
+    <div class="logo">
+      <img src="https://via.placeholder.com/150">
+      <h2>Colmado El Ideal</h2>
     </div>
 
-    <div class="tools">
-      🔍 <input type="text" id="search" placeholder="Buscar">
-      <div class="cart" onclick="toggleCart()">🛒 (<span id="cartCount">0</span>)</div>
+    <div class="search">
+      <input id="search" placeholder="Buscar...">
     </div>
+
+    <div class="dark-btn" onclick="toggleDark()">🌙</div>
+    <div class="cart-btn" onclick="toggleCart()">🛒 <span id="count">0</span></div>
   </div>
 </header>
 
-<!-- PRODUCTOS -->
 <div class="container">
+
+  <!-- PANEL ADMIN -->
+  <div class="admin">
+    <h3>➕ Agregar producto</h3>
+    <input id="pname" placeholder="Nombre">
+    <input id="pprice" placeholder="Precio" type="number">
+    <button onclick="addProduct()">Agregar</button>
+  </div>
+
   <div class="products" id="products"></div>
 </div>
 
 <!-- CARRITO -->
-<div id="cartPanel">
-  <h3>🛒 Tu pedido</h3>
+<div id="cart">
+  <h3>🛒 Pedido</h3>
   <div id="cartItems"></div>
-  <button onclick="toggleCart()">Cerrar</button>
+  <h4>Total: RD$ <span id="total">0</span></h4>
+  <button onclick="sendWhatsApp()">📲 Enviar por WhatsApp</button>
 </div>
 
 <script>
-const productsData=[
-  {name:"Arroz"},
-  {name:"Aceite"},
-  {name:"Azúcar"},
-  {name:"Refresco"},
-  {name:"Cerveza"},
-  {name:"Leche"},
-  {name:"Pan"},
-  {name:"Huevos"},
-  {name:"Sal"},
-  {name:"Café"},
-  {name:"Galletas"},
-  {name:"Jugo"}
-];
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || {};
+let show = 0;
 
-const productsEl=document.getElementById("products");
-const cartItems=document.getElementById("cartItems");
-const cartCount=document.getElementById("cartCount");
-let cart=[];
-
-function renderProducts(list){
-  productsEl.innerHTML="";
-  list.forEach(p=>{
-    const div=document.createElement("div");
-    div.className="product";
-    div.innerHTML=`
-      <img src="https://via.placeholder.com/150">
-      <h4>${p.name}</h4>
-      <button onclick="addToCart('${p.name}')">Agregar</button>
-    `;
-    productsEl.appendChild(div);
-  });
+/* PRODUCTOS BASE */
+if(products.length === 0){
+  for(let i=1;i<=100;i++){
+    products.push({name:"Producto "+i,price:50+i});
+  }
 }
 
-function addToCart(name){
-  cart.push(name);
+/* CARGA */
+function load(){
+  let cont = document.getElementById("products");
+  for(let i=0;i<20 && show<products.length;i++){
+    let p = products[show++];
+    cont.innerHTML += `
+      <div class="product">
+        <img src="https://via.placeholder.com/200">
+        <h4>${p.name}</h4>
+        <p>RD$ ${p.price}</p>
+        <div class="controls">
+          <button onclick="add('${p.name}',${p.price})">+</button>
+          <button onclick="remove('${p.name}')">-</button>
+        </div>
+      </div>`;
+  }
+}
+
+/* SCROLL */
+window.onscroll=()=> {
+  if(innerHeight+scrollY>=document.body.offsetHeight-200) load();
+};
+
+/* BUSCAR */
+search.oninput=()=>{
+  productsDiv.innerHTML="";
+  show=0;
+  let f = products.filter(p=>p.name.toLowerCase().includes(search.value.toLowerCase()));
+  products=f;
+  load();
+};
+
+/* CARRITO */
+function add(n,p){
+  cart[n]=(cart[n]||{q:0,p}).q++;
+  save();
+}
+
+function remove(n){
+  if(cart[n]){
+    cart[n].q--;
+    if(cart[n].q<=0) delete cart[n];
+    save();
+  }
+}
+
+function save(){
+  localStorage.setItem("cart",JSON.stringify(cart));
   updateCart();
 }
 
 function updateCart(){
   cartItems.innerHTML="";
-  cart.forEach((item,i)=>{
-    cartItems.innerHTML+=`
-      <div class="cart-item">
-        ${item}
-        <span onclick="removeItem(${i})">❌</span>
-      </div>
-    `;
-  });
-  cartCount.textContent=cart.length;
+  let t=0,c=0;
+  for(let k in cart){
+    let i=cart[k];
+    t+=i.q*i.p;
+    c+=i.q;
+    cartItems.innerHTML+=`${k} x${i.q}<br>`;
+  }
+  total.innerText=t;
+  count.innerText=c;
 }
 
-function removeItem(i){
-  cart.splice(i,1);
-  updateCart();
+/* WHATSAPP */
+function sendWhatsApp(){
+  let msg="Pedido:%0A";
+  for(let k in cart){
+    msg+=`${k} x${cart[k].q}%0A`;
+  }
+  msg+=`Total RD$ ${total.innerText}`;
+  window.open(`https://wa.me/18000000000?text=${msg}`);
 }
 
-function toggleCart(){
-  document.getElementById("cartPanel").classList.toggle("open");
+/* ADMIN */
+function addProduct(){
+  products.unshift({name:pname.value,price:pprice.value});
+  localStorage.setItem("products",JSON.stringify(products));
+  location.reload();
 }
 
-document.getElementById("search").addEventListener("input",e=>{
-  const val=e.target.value.toLowerCase();
-  renderProducts(productsData.filter(p=>p.name.toLowerCase().includes(val)));
-});
+/* MODO OSCURO */
+function toggleDark(){
+  document.body.classList.toggle("dark");
+  localStorage.setItem("dark",document.body.classList.contains("dark"));
+}
 
-renderProducts(productsData);
+if(localStorage.getItem("dark")=="true") document.body.classList.add("dark");
+
+load(); updateCart();
 </script>
 
 </body>
