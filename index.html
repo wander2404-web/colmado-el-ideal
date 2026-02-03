@@ -1,39 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Colmado El Ideal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root {
-  --bg:#f4f4f4;
-  --card:#fff;
-  --text:#000;
-  --main:#f57c00;
-}
-
-.dark {
-  --bg:#121212;
-  --card:#1e1e1e;
-  --text:#fff;
-}
-
-body {
+*{box-sizing:border-box}
+body{
   margin:0;
-  font-family: Arial, sans-serif;
-  background:var(--bg);
-  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f4f4;
+  color:#222;
 }
 
 /* HEADER */
-header {
-  background:var(--main);
+header{
+  background:#f57c00;
   color:#fff;
-  padding:15px;
+  padding:12px;
 }
-
-.header {
+.header-wrap{
   max-width:1200px;
   margin:auto;
   display:flex;
@@ -41,84 +28,115 @@ header {
   justify-content:space-between;
   gap:10px;
 }
-
-.logo {
+.brand{
   display:flex;
   align-items:center;
   gap:10px;
 }
-
-.logo img {
-  width:70px;
+.brand img{
+  width:64px;
+  height:64px;
+  object-fit:contain;
 }
-
-.search input {
-  padding:8px;
+.brand h1{
+  margin:0;
+  font-size:22px;
+  line-height:1.1;
+}
+.search{
+  flex:1;
+  max-width:420px;
+  position:relative;
+}
+.search input{
+  width:100%;
+  padding:10px 36px 10px 12px;
   border-radius:20px;
   border:none;
 }
-
-.cart-btn, .dark-btn {
+.search span{
+  position:absolute;
+  right:12px; top:8px;
+}
+.cart-btn{
   cursor:pointer;
-  font-size:18px;
+  font-weight:bold;
 }
 
-/* CONTENEDOR */
-.container {
+/* CONTENIDO */
+.container{
   max-width:1200px;
   margin:auto;
-  padding:15px;
+  padding:16px;
 }
-
-.products {
+.grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-  gap:15px;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
 }
-
-.product {
-  background:var(--card);
-  border-radius:10px;
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:520px){
+  .grid{grid-template-columns:1fr}
+}
+.card{
+  background:#fff;
+  border-radius:12px;
   padding:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
   text-align:center;
 }
-
-.product img {
+.card img{
   width:100%;
-  height:130px;
+  height:140px;
   object-fit:contain;
 }
-
-.controls {
+.card h4{margin:8px 0 4px}
+.card p{margin:0 0 8px; font-weight:bold}
+.controls{
   display:flex;
   justify-content:center;
   gap:10px;
 }
-
-button {
+.controls button{
+  padding:6px 10px;
+  border:none;
+  border-radius:6px;
   cursor:pointer;
 }
 
 /* CARRITO */
-#cart {
+#cart{
   position:fixed;
-  right:0;
-  top:0;
-  width:320px;
-  height:100%;
-  background:var(--card);
-  box-shadow:-3px 0 10px rgba(0,0,0,.3);
-  padding:15px;
+  right:0; top:0;
+  width:320px; height:100%;
+  background:#fff;
+  box-shadow:-3px 0 12px rgba(0,0,0,.2);
+  padding:14px;
   display:none;
   overflow:auto;
 }
-
-/* ADMIN */
-.admin {
-  margin:20px 0;
-  background:var(--card);
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+.cart-item small{opacity:.7}
+.total{
+  font-size:18px;
+  margin-top:10px;
+}
+.whatsapp{
+  margin-top:10px;
+  width:100%;
   padding:10px;
-  border-radius:10px;
+  border:none;
+  border-radius:8px;
+  background:#25D366;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -126,144 +144,120 @@ button {
 <body>
 
 <header>
-  <div class="header">
-    <div class="logo">
-      <img src="https://via.placeholder.com/150">
-      <h2>Colmado El Ideal</h2>
+  <div class="header-wrap">
+    <div class="brand">
+      <!-- Cambia la imagen por tu logo -->
+      <img src="https://via.placeholder.com/128" alt="Logo">
+      <h1>Colmado<br>El Ideal</h1>
     </div>
 
     <div class="search">
-      <input id="search" placeholder="Buscar...">
+      <input id="q" placeholder="Buscar producto…">
+      <span>🔍</span>
     </div>
 
-    <div class="dark-btn" onclick="toggleDark()">🌙</div>
     <div class="cart-btn" onclick="toggleCart()">🛒 <span id="count">0</span></div>
   </div>
 </header>
 
 <div class="container">
-
-  <!-- PANEL ADMIN -->
-  <div class="admin">
-    <h3>➕ Agregar producto</h3>
-    <input id="pname" placeholder="Nombre">
-    <input id="pprice" placeholder="Precio" type="number">
-    <button onclick="addProduct()">Agregar</button>
-  </div>
-
-  <div class="products" id="products"></div>
+  <div id="grid" class="grid"></div>
 </div>
 
-<!-- CARRITO -->
 <div id="cart">
-  <h3>🛒 Pedido</h3>
-  <div id="cartItems"></div>
-  <h4>Total: RD$ <span id="total">0</span></h4>
-  <button onclick="sendWhatsApp()">📲 Enviar por WhatsApp</button>
+  <h3>🛒 Carrito</h3>
+  <div id="items"></div>
+  <div class="total">Total: RD$ <span id="total">0</span></div>
+  <button class="whatsapp" onclick="sendWA()">Enviar por WhatsApp</button>
 </div>
 
 <script>
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let cart = JSON.parse(localStorage.getItem("cart")) || {};
-let show = 0;
-
-/* PRODUCTOS BASE */
-if(products.length === 0){
-  for(let i=1;i<=100;i++){
-    products.push({name:"Producto "+i,price:50+i});
-  }
+// ====== DATOS ======
+const ALL = [];
+for(let i=1;i<=300;i++){
+  ALL.push({name:`Producto ${i}`, price: 40 + (i%20)});
 }
+let filtered = [...ALL];
+let cart = {};
+let loaded = 0;
+const STEP = 18;
 
-/* CARGA */
-function load(){
-  let cont = document.getElementById("products");
-  for(let i=0;i<20 && show<products.length;i++){
-    let p = products[show++];
-    cont.innerHTML += `
-      <div class="product">
-        <img src="https://via.placeholder.com/200">
-        <h4>${p.name}</h4>
-        <p>RD$ ${p.price}</p>
-        <div class="controls">
-          <button onclick="add('${p.name}',${p.price})">+</button>
-          <button onclick="remove('${p.name}')">-</button>
-        </div>
+// ====== RENDER ======
+const grid = document.getElementById('grid');
+function loadMore(){
+  for(let i=0;i<STEP && loaded<filtered.length;i++){
+    const p = filtered[loaded++];
+    const d = document.createElement('div');
+    d.className='card';
+    d.innerHTML=`
+      <img src="https://via.placeholder.com/300">
+      <h4>${p.name}</h4>
+      <p>RD$ ${p.price}</p>
+      <div class="controls">
+        <button onclick="add('${p.name}',${p.price})">+</button>
+        <button onclick="sub('${p.name}',${p.price})">-</button>
       </div>`;
+    grid.appendChild(d);
   }
 }
+loadMore();
 
-/* SCROLL */
-window.onscroll=()=> {
-  if(innerHeight+scrollY>=document.body.offsetHeight-200) load();
-};
+// ====== SCROLL TIPO RULETA ======
+window.addEventListener('scroll', ()=>{
+  if(innerHeight + scrollY >= document.body.offsetHeight - 200){
+    loadMore();
+  }
+});
 
-/* BUSCAR */
-search.oninput=()=>{
-  productsDiv.innerHTML="";
-  show=0;
-  let f = products.filter(p=>p.name.toLowerCase().includes(search.value.toLowerCase()));
-  products=f;
-  load();
-};
+// ====== BUSCADOR ======
+q.addEventListener('input', ()=>{
+  grid.innerHTML='';
+  loaded=0;
+  const t = q.value.toLowerCase();
+  filtered = ALL.filter(p=>p.name.toLowerCase().includes(t));
+  loadMore();
+});
 
-/* CARRITO */
+// ====== CARRITO ======
 function add(n,p){
-  cart[n]=(cart[n]||{q:0,p}).q++;
-  save();
+  cart[n]=(cart[n]||{q:0,p});
+  cart[n].q++;
+  updateCart();
 }
-
-function remove(n){
+function sub(n){
   if(cart[n]){
     cart[n].q--;
     if(cart[n].q<=0) delete cart[n];
-    save();
+    updateCart();
   }
 }
-
-function save(){
-  localStorage.setItem("cart",JSON.stringify(cart));
-  updateCart();
-}
-
 function updateCart(){
-  cartItems.innerHTML="";
+  items.innerHTML='';
   let t=0,c=0;
-  for(let k in cart){
-    let i=cart[k];
-    t+=i.q*i.p;
-    c+=i.q;
-    cartItems.innerHTML+=`${k} x${i.q}<br>`;
+  for(const k in cart){
+    const it = cart[k];
+    t+=it.q*it.p; c+=it.q;
+    items.innerHTML+=`
+      <div class="cart-item">
+        <div>${k}<br><small>x${it.q}</small></div>
+        <div>RD$ ${it.q*it.p}</div>
+      </div>`;
   }
-  total.innerText=t;
-  count.innerText=c;
+  total.textContent=t;
+  count.textContent=c;
+}
+function toggleCart(){
+  cart.style.display = cart.style.display==='block'?'none':'block';
 }
 
-/* WHATSAPP */
-function sendWhatsApp(){
-  let msg="Pedido:%0A";
-  for(let k in cart){
-    msg+=`${k} x${cart[k].q}%0A`;
-  }
-  msg+=`Total RD$ ${total.innerText}`;
-  window.open(`https://wa.me/18000000000?text=${msg}`);
+// ====== WHATSAPP ======
+function sendWA(){
+  let msg='Pedido:%0A';
+  for(const k in cart){ msg+=`${k} x${cart[k].q}%0A`; }
+  msg+=`Total RD$ ${total.textContent}`;
+  // Cambia el número por el tuyo
+  window.open(`https://wa.me/18296020646?text=${msg}`);
 }
-
-/* ADMIN */
-function addProduct(){
-  products.unshift({name:pname.value,price:pprice.value});
-  localStorage.setItem("products",JSON.stringify(products));
-  location.reload();
-}
-
-/* MODO OSCURO */
-function toggleDark(){
-  document.body.classList.toggle("dark");
-  localStorage.setItem("dark",document.body.classList.contains("dark"));
-}
-
-if(localStorage.getItem("dark")=="true") document.body.classList.add("dark");
-
-load(); updateCart();
 </script>
 
 </body>
