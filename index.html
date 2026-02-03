@@ -1,142 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
 <title>Colmado El Ideal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:#f4f4f4;
-  color:#222;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
 }
 
 /* HEADER */
-header{
-  background:#f57c00;
-  color:#fff;
-  padding:12px;
+header {
+  background: #f57c00;
+  color: white;
+  text-align: center;
+  padding: 15px;
 }
-.header-wrap{
-  max-width:1200px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
+header img {
+  width: 110px;
+  display: block;
+  margin: auto;
 }
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
+header h1 {
+  margin: 10px 0 5px;
 }
-.brand img{
-  width:64px;
-  height:64px;
-  object-fit:contain;
-}
-.brand h1{
-  margin:0;
-  font-size:22px;
-  line-height:1.1;
-}
-.search{
-  flex:1;
-  max-width:420px;
-  position:relative;
-}
-.search input{
-  width:100%;
-  padding:10px 36px 10px 12px;
-  border-radius:20px;
-  border:none;
-}
-.search span{
-  position:absolute;
-  right:12px; top:8px;
-}
-.cart-btn{
-  cursor:pointer;
-  font-weight:bold;
+header p {
+  margin: 0;
+  font-size: 14px;
 }
 
-/* CONTENIDO */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:16px;
+/* PRODUCTOS */
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 15px;
 }
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
 }
-@media(max-width:900px){
-  .grid{grid-template-columns:repeat(2,1fr)}
+
+.product {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
 }
-@media(max-width:520px){
-  .grid{grid-template-columns:1fr}
+
+.product img {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
 }
-.card{
-  background:#fff;
-  border-radius:12px;
-  padding:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
-  text-align:center;
+
+.product h3 {
+  font-size: 15px;
+  margin: 8px 0 4px;
 }
-.card img{
-  width:100%;
-  height:140px;
-  object-fit:contain;
+
+.product p {
+  margin: 0;
+  font-weight: bold;
+  color: #f57c00;
 }
-.card h4{margin:8px 0 4px}
-.card p{margin:0 0 8px; font-weight:bold}
-.controls{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-}
-.controls button{
-  padding:6px 10px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
+
+.product button {
+  margin-top: 8px;
+  padding: 8px;
+  width: 100%;
+  border: none;
+  background: #4caf50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 /* CARRITO */
-#cart{
-  position:fixed;
-  right:0; top:0;
-  width:320px; height:100%;
-  background:#fff;
-  box-shadow:-3px 0 12px rgba(0,0,0,.2);
-  padding:14px;
-  display:none;
-  overflow:auto;
+.cart {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 2px solid #f57c00;
+  padding: 10px;
 }
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:8px;
+
+.cart h3 {
+  margin: 0 0 5px;
 }
-.cart-item small{opacity:.7}
-.total{
-  font-size:18px;
-  margin-top:10px;
+
+#cartItems {
+  font-size: 14px;
 }
-.whatsapp{
-  margin-top:10px;
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#25D366;
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
+
+.whatsapp {
+  margin-top: 8px;
+  background: #25d366;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.whatsapp img {
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* RESPONSIVE */
+@media(max-width: 768px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
 </head>
@@ -144,119 +129,74 @@ header{
 <body>
 
 <header>
-  <div class="header-wrap">
-    <div class="brand">
-      <!-- Cambia la imagen por tu logo -->
-      <img src="https://via.placeholder.com/128" alt="Logo">
-      <h1>Colmado<br>El Ideal</h1>
-    </div>
-
-    <div class="search">
-      <input id="q" placeholder="Buscar producto…">
-      <span>🔍</span>
-    </div>
-
-    <div class="cart-btn" onclick="toggleCart()">🛒 <span id="count">0</span></div>
-  </div>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Shopping_cart_icon.svg/512px-Shopping_cart_icon.svg.png">
+  <h1>Colmado El Ideal</h1>
+  <p>Calle 18 de Noviembre, al lado de la escuela<br>7:00 AM – 12:00 AM</p>
 </header>
 
 <div class="container">
-  <div id="grid" class="grid"></div>
+  <div class="products" id="products"></div>
 </div>
 
-<div id="cart">
-  <h3>🛒 Carrito</h3>
-  <div id="items"></div>
-  <div class="total">Total: RD$ <span id="total">0</span></div>
-  <button class="whatsapp" onclick="sendWA()">Enviar por WhatsApp</button>
+<div class="cart">
+  <h3>🛒 Pedido</h3>
+  <div id="cartItems">Carrito vacío</div>
+  <div class="whatsapp" onclick="sendWhatsApp()">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+    Enviar pedido por WhatsApp
+  </div>
 </div>
 
 <script>
-// ====== DATOS ======
-const ALL = [];
-for(let i=1;i<=300;i++){
-  ALL.push({name:`Producto ${i}`, price: 40 + (i%20)});
-}
-let filtered = [...ALL];
-let cart = {};
-let loaded = 0;
-const STEP = 18;
+const phone = "18296020646";
 
-// ====== RENDER ======
-const grid = document.getElementById('grid');
-function loadMore(){
-  for(let i=0;i<STEP && loaded<filtered.length;i++){
-    const p = filtered[loaded++];
-    const d = document.createElement('div');
-    d.className='card';
-    d.innerHTML=`
-      <img src="https://via.placeholder.com/300">
-      <h4>${p.name}</h4>
-      <p>RD$ ${p.price}</p>
-      <div class="controls">
-        <button onclick="add('${p.name}',${p.price})">+</button>
-        <button onclick="sub('${p.name}',${p.price})">-</button>
-      </div>`;
-    grid.appendChild(d);
-  }
-}
-loadMore();
+const productList = [
+  {name:"Arroz Selecto", price:70},
+  {name:"Aceite Crisol", price:180},
+  {name:"Habichuelas Rojas", price:95},
+  {name:"Azúcar Blanca", price:55},
+  {name:"Leche Rica", price:85},
+  {name:"Huevos (unidad)", price:10}
+];
 
-// ====== SCROLL TIPO RULETA ======
-window.addEventListener('scroll', ()=>{
-  if(innerHeight + scrollY >= document.body.offsetHeight - 200){
-    loadMore();
-  }
+let cart = [];
+
+const productsDiv = document.getElementById("products");
+const cartDiv = document.getElementById("cartItems");
+
+productList.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "product";
+  div.innerHTML = `
+    <img src="https://via.placeholder.com/300x200?text=${encodeURIComponent(p.name)}">
+    <h3>${p.name}</h3>
+    <p>RD$ ${p.price}</p>
+    <button onclick="addToCart('${p.name}', ${p.price})">Agregar</button>
+  `;
+  productsDiv.appendChild(div);
 });
 
-// ====== BUSCADOR ======
-q.addEventListener('input', ()=>{
-  grid.innerHTML='';
-  loaded=0;
-  const t = q.value.toLowerCase();
-  filtered = ALL.filter(p=>p.name.toLowerCase().includes(t));
-  loadMore();
-});
-
-// ====== CARRITO ======
-function add(n,p){
-  cart[n]=(cart[n]||{q:0,p});
-  cart[n].q++;
-  updateCart();
-}
-function sub(n){
-  if(cart[n]){
-    cart[n].q--;
-    if(cart[n].q<=0) delete cart[n];
-    updateCart();
-  }
-}
-function updateCart(){
-  items.innerHTML='';
-  let t=0,c=0;
-  for(const k in cart){
-    const it = cart[k];
-    t+=it.q*it.p; c+=it.q;
-    items.innerHTML+=`
-      <div class="cart-item">
-        <div>${k}<br><small>x${it.q}</small></div>
-        <div>RD$ ${it.q*it.p}</div>
-      </div>`;
-  }
-  total.textContent=t;
-  count.textContent=c;
-}
-function toggleCart(){
-  cart.style.display = cart.style.display==='block'?'none':'block';
+function addToCart(name, price){
+  cart.push({name, price});
+  renderCart();
 }
 
-// ====== WHATSAPP ======
-function sendWA(){
-  let msg='Pedido:%0A';
-  for(const k in cart){ msg+=`${k} x${cart[k].q}%0A`; }
-  msg+=`Total RD$ ${total.textContent}`;
-  // Cambia el número por el tuyo
-  window.open(`https://wa.me/18296020646?text=${msg}`);
+function renderCart(){
+  if(cart.length === 0){
+    cartDiv.innerText = "Carrito vacío";
+    return;
+  }
+  cartDiv.innerHTML = cart.map(c => `• ${c.name} RD$${c.price}`).join("<br>");
+}
+
+function sendWhatsApp(){
+  if(cart.length === 0){
+    alert("El carrito está vacío");
+    return;
+  }
+  let msg = "Pedido Colmado El Ideal:%0A";
+  cart.forEach(c => msg += `- ${c.name} RD$${c.price}%0A`);
+  window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
 }
 </script>
 
