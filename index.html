@@ -6,122 +6,108 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f4f4;
 }
 
 /* HEADER */
-header {
-  background: #f57c00;
-  color: white;
-  text-align: center;
-  padding: 15px;
+header{
+  background:#f57c00;
+  color:white;
+  text-align:center;
+  padding:20px 10px;
 }
-header img {
-  width: 110px;
-  display: block;
-  margin: auto;
-}
-header h1 {
-  margin: 10px 0 5px;
-}
-header p {
-  margin: 0;
-  font-size: 14px;
-}
+header h1{ margin:5px 0; }
+header p{ margin:0; font-size:14px; }
 
 /* PRODUCTOS */
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 15px;
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:15px;
 }
 
-.products {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
+.products{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
 }
 
-.product {
-  background: white;
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+.product{
+  background:white;
+  border-radius:10px;
+  padding:10px;
+  text-align:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
 }
 
-.product img {
-  width: 100%;
-  height: 140px;
-  object-fit: contain;
+.product img{
+  width:100%;
+  height:160px;
+  object-fit:contain;
+  margin-bottom:5px;
 }
 
-.product h3 {
-  font-size: 15px;
-  margin: 8px 0 4px;
+.product h3{
+  margin:5px 0;
+  font-size:15px;
 }
 
-.product p {
-  margin: 0;
-  font-weight: bold;
-  color: #f57c00;
+.product p{
+  margin:0;
+  color:#f57c00;
+  font-weight:bold;
 }
 
-.product button {
-  margin-top: 8px;
-  padding: 8px;
-  width: 100%;
-  border: none;
-  background: #4caf50;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
+.product button{
+  margin-top:8px;
+  width:100%;
+  padding:8px;
+  border:none;
+  background:#4caf50;
+  color:white;
+  border-radius:5px;
+  cursor:pointer;
 }
 
 /* CARRITO */
-.cart {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  border-top: 2px solid #f57c00;
-  padding: 10px;
+.cart{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  border-top:3px solid #f57c00;
+  padding:10px;
 }
 
-.cart h3 {
-  margin: 0 0 5px;
+.cart h3{ margin:0 0 5px; }
+
+#cartItems{
+  font-size:14px;
+  max-height:120px;
+  overflow:auto;
 }
 
-#cartItems {
-  font-size: 14px;
-}
-
-.whatsapp {
-  margin-top: 8px;
-  background: #25d366;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.whatsapp img {
-  width: 20px;
-  vertical-align: middle;
-  margin-right: 5px;
+.whatsapp{
+  margin-top:8px;
+  background:#25d366;
+  color:white;
+  padding:10px;
+  text-align:center;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 /* RESPONSIVE */
-@media(max-width: 768px) {
-  .products {
-    grid-template-columns: repeat(2, 1fr);
-  }
+@media(max-width:768px){
+  .products{ grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:480px){
+  .products{ grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -129,9 +115,11 @@ header p {
 <body>
 
 <header>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Shopping_cart_icon.svg/512px-Shopping_cart_icon.svg.png">
   <h1>Colmado El Ideal</h1>
-  <p>Calle 18 de Noviembre, al lado de la escuela<br>7:00 AM – 12:00 AM</p>
+  <p>
+    Calle 18 de Noviembre, al lado de la escuela<br>
+    7:00 AM – 12:00 AM
+  </p>
 </header>
 
 <div class="container">
@@ -142,8 +130,7 @@ header p {
   <h3>🛒 Pedido</h3>
   <div id="cartItems">Carrito vacío</div>
   <div class="whatsapp" onclick="sendWhatsApp()">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-    Enviar pedido por WhatsApp
+    📲 Enviar pedido por WhatsApp
   </div>
 </div>
 
@@ -151,12 +138,12 @@ header p {
 const phone = "18296020646";
 
 const productList = [
-  {name:"Arroz Selecto", price:70},
-  {name:"Aceite Crisol", price:180},
-  {name:"Habichuelas Rojas", price:95},
-  {name:"Azúcar Blanca", price:55},
-  {name:"Leche Rica", price:85},
-  {name:"Huevos (unidad)", price:10}
+  {name:"Arroz Selecto", price:70, img:"arroz.jpg"},
+  {name:"Aceite Crisol", price:180, img:"aceite.jpg"},
+  {name:"Habichuelas Rojas", price:95, img:"habichuelas.jpg"},
+  {name:"Azúcar Blanca", price:55, img:"azucar.jpg"},
+  {name:"Leche Rica", price:85, img:"leche.jpg"},
+  {name:"Huevos (unidad)", price:10, img:"huevos.jpg"}
 ];
 
 let cart = [];
@@ -164,39 +151,39 @@ let cart = [];
 const productsDiv = document.getElementById("products");
 const cartDiv = document.getElementById("cartItems");
 
-productList.forEach(p => {
-  const div = document.createElement("div");
-  div.className = "product";
-  div.innerHTML = `
-    <img src="https://via.placeholder.com/300x200?text=${encodeURIComponent(p.name)}">
+productList.forEach(p=>{
+  const div=document.createElement("div");
+  div.className="product";
+  div.innerHTML=`
+    <img src="imagenes/${p.img}" alt="${p.name}">
     <h3>${p.name}</h3>
     <p>RD$ ${p.price}</p>
-    <button onclick="addToCart('${p.name}', ${p.price})">Agregar</button>
+    <button onclick="addToCart('${p.name}',${p.price})">Agregar</button>
   `;
   productsDiv.appendChild(div);
 });
 
-function addToCart(name, price){
-  cart.push({name, price});
+function addToCart(name,price){
+  cart.push({name,price});
   renderCart();
 }
 
 function renderCart(){
-  if(cart.length === 0){
-    cartDiv.innerText = "Carrito vacío";
+  if(cart.length===0){
+    cartDiv.innerText="Carrito vacío";
     return;
   }
-  cartDiv.innerHTML = cart.map(c => `• ${c.name} RD$${c.price}`).join("<br>");
+  cartDiv.innerHTML=cart.map(c=>`• ${c.name} RD$${c.price}`).join("<br>");
 }
 
 function sendWhatsApp(){
-  if(cart.length === 0){
+  if(cart.length===0){
     alert("El carrito está vacío");
     return;
   }
-  let msg = "Pedido Colmado El Ideal:%0A";
-  cart.forEach(c => msg += `- ${c.name} RD$${c.price}%0A`);
-  window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+  let msg="Pedido Colmado El Ideal:%0A";
+  cart.forEach(c=>msg+=`- ${c.name} RD$${c.price}%0A`);
+  window.open(`https://wa.me/${phone}?text=${msg}`,"_blank");
 }
 </script>
 
