@@ -1,191 +1,174 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-DO"> <!-- Especifica el país para mejor SEO local -->
 <head>
-<meta charset="UTF-8">
-<title>Colmado El Ideal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colmado El Ideal | Abarrotes y Servicios en Santo Domingo</title>
+  <meta name="description" content="Colmado El Ideal en República Dominicana: atención todos los días de 7:00 a.m. a 12:00 a.m. Ubicado en Calle 18 de Noviembre, al lado de la escuela. Pide por WhatsApp!">
+  <meta name="keywords" content="colmado, abarrotes, Santo Domingo, República Dominicana, colmado El Ideal, pedido por WhatsApp">
+  <meta name="author" content="Colmado El Ideal">
+  <meta property="og:title" content="Colmado El Ideal | Tu Colmado de Confianza"> <!-- Para redes sociales -->
+  <meta property="og:description" content="Atención diaria 7am a 12am. Ubicación en Calle 18 de Noviembre. Contáctanos por WhatsApp.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Añade un favicon si lo tienes -->
+  <style>
+    /* Reset básico optimizado */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f4f4f4;
-}
+    /* Variables CSS para facilitar mantenimiento */
+    :root {
+      --color-principal: #c62828;
+      --color-secundario: #25D366;
+      --color-oscuro: #333;
+      --color-claro: #555;
+      --color-fondo: #f5f5f5;
+      --color-blanco: #fff;
+      --sombra-suave: 0 2px 8px rgba(0,0,0,0.1);
+      --sombra-header: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-/* HEADER */
-header{
-  background:#f57c00;
-  color:white;
-  text-align:center;
-  padding:20px 10px;
-}
-header h1{ margin:5px 0; }
-header p{ margin:0; font-size:14px; }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: var(--color-fondo);
+      text-align: center;
+      line-height: 1.6;
+      color: var(--color-oscuro);
+    }
 
-/* PRODUCTOS */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:15px;
-}
+    header {
+      background-color: var(--color-principal);
+      color: var(--color-blanco);
+      padding: clamp(1.2rem, 5vw, 2rem); /* Responsivo sin media queries */
+      box-shadow: var(--sombra-header);
+    }
 
-.products{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
+    header h1 {
+      margin-bottom: 0.5rem;
+      font-size: clamp(1.5rem, 6vw, 2.2rem);
+    }
 
-.product{
-  background:white;
-  border-radius:10px;
-  padding:10px;
-  text-align:center;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
+    header p {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      opacity: 0.9;
+    }
 
-.product img{
-  width:100%;
-  height:160px;
-  object-fit:contain;
-  margin-bottom:5px;
-}
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(1rem, 4vw, 2rem);
+    }
 
-.product h3{
-  margin:5px 0;
-  font-size:15px;
-}
+    .card {
+      background-color: var(--color-blanco);
+      padding: clamp(1.2rem, 4vw, 2rem);
+      margin: clamp(1rem, 3vw, 1.5rem) auto;
+      max-width: 400px;
+      border-radius: 8px;
+      box-shadow: var(--sombra-suave);
+      transition: transform 0.3s ease-in-out;
+    }
 
-.product p{
-  margin:0;
-  color:#f57c00;
-  font-weight:bold;
-}
+    .card:hover {
+      transform: translateY(-5px);
+    }
 
-.product button{
-  margin-top:8px;
-  width:100%;
-  padding:8px;
-  border:none;
-  background:#4caf50;
-  color:white;
-  border-radius:5px;
-  cursor:pointer;
-}
+    .card h2 {
+      color: var(--color-oscuro);
+      margin-bottom: 1rem;
+      font-size: clamp(1.3rem, 4vw, 1.6rem);
+    }
 
-/* CARRITO */
-.cart{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:white;
-  border-top:3px solid #f57c00;
-  padding:10px;
-}
+    .card p {
+      color: var(--color-claro);
+      font-size: clamp(0.95rem, 3vw, 1.1rem);
+    }
 
-.cart h3{ margin:0 0 5px; }
+    .btn {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 12px 18px;
+      background-color: var(--color-secundario);
+      color: var(--color-blanco);
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+      /* Mejoras de accesibilidad */
+      cursor: pointer;
+      text-align: center;
+      min-width: 180px;
+    }
 
-#cartItems{
-  font-size:14px;
-  max-height:120px;
-  overflow:auto;
-}
+    .btn:hover,
+    .btn:focus { /* Efecto para teclado */
+      background-color: #128C7E;
+      outline: 2px solid #128C7E;
+      outline-offset: 2px;
+    }
 
-.whatsapp{
-  margin-top:8px;
-  background:#25d366;
-  color:white;
-  padding:10px;
-  text-align:center;
-  border-radius:6px;
-  font-weight:bold;
-  cursor:pointer;
-}
+    footer {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+      color: var(--color-claro);
+      background-color: var(--color-blanco);
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+    }
 
-/* RESPONSIVE */
-@media(max-width:768px){
-  .products{ grid-template-columns:repeat(2,1fr); }
-}
-@media(max-width:480px){
-  .products{ grid-template-columns:1fr; }
-}
-</style>
+    /* Mejoras para lectores de pantalla */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  </style>
 </head>
-
 <body>
+  <header>
+    <h1>Colmado El Ideal</h1>
+    <p>Tu colmado de confianza, siempre cerca de ti</p>
+  </header>
 
-<header>
-  <h1>Colmado El Ideal</h1>
-  <p>
-    Calle 18 de Noviembre, al lado de la escuela<br>
-    7:00 AM – 12:00 AM
-  </p>
-</header>
+  <main class="container"> <!-- Etiqueta semántica -->
+    <section class="card" aria-labelledby="horario-titulo"> <!-- Accesibilidad -->
+      <h2 id="horario-titulo">⏰ Horario de atención</h2>
+      <p>Todos los días<br><strong>7:00 a.m. – 12:00 a.m.</strong></p>
+    </section>
 
-<div class="container">
-  <div class="products" id="products"></div>
-</div>
+    <section class="card" aria-labelledby="ubicacion-titulo">
+      <h2 id="ubicacion-titulo">📍 Ubicación</h2>
+      <p>Calle 18 de Noviembre, al lado de la escuela</p>
+      <p>República Dominicana</p>
+      <em>Encuéntranos fácilmente en Google Maps</em>
+      <!-- Enlace opcional a Google Maps (añade la URL correcta) -->
+      <a href="https://www.google.com/maps/search/Calle+18+de+Noviembre,+Santo+Domingo" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top: 1rem; background-color: #4285F4;">
+        <span class="sr-only">Ver ubicación en </span>Google Maps
+      </a>
+    </section>
 
-<div class="cart">
-  <h3>🛒 Pedido</h3>
-  <div id="cartItems">Carrito vacío</div>
-  <div class="whatsapp" onclick="sendWhatsApp()">
-    📲 Enviar pedido por WhatsApp
-  </div>
-</div>
+    <section class="card" aria-labelledby="contacto-titulo">
+      <h2 id="contacto-titulo">📲 Contáctanos</h2>
+      <p>Haz tu pedido o consulta por WhatsApp:</p>
+      <a class="btn" href="https://wa.me/18296020646?text=Hola%20quiero%20información%20del%20colmado" target="_blank" rel="noopener noreferrer">
+        <span class="sr-only">Enviar mensaje a </span>Escribir por WhatsApp
+      </a>
+    </section>
+  </main>
 
-<script>
-const phone = "18296020646";
-
-const productList = [
-  {name:"Arroz Selecto", price:70, img:"arroz.jpg"},
-  {name:"Aceite Crisol", price:180, img:"aceite.jpg"},
-  {name:"Habichuelas Rojas", price:95, img:"habichuelas.jpg"},
-  {name:"Azúcar Blanca", price:55, img:"azucar.jpg"},
-  {name:"Leche Rica", price:85, img:"leche.jpg"},
-  {name:"Huevos (unidad)", price:10, img:"huevos.jpg"}
-];
-
-let cart = [];
-
-const productsDiv = document.getElementById("products");
-const cartDiv = document.getElementById("cartItems");
-
-productList.forEach(p=>{
-  const div=document.createElement("div");
-  div.className="product";
-  div.innerHTML=`
-    <img src="imagenes/${p.img}" alt="${p.name}">
-    <h3>${p.name}</h3>
-    <p>RD$ ${p.price}</p>
-    <button onclick="addToCart('${p.name}',${p.price})">Agregar</button>
-  `;
-  productsDiv.appendChild(div);
-});
-
-function addToCart(name,price){
-  cart.push({name,price});
-  renderCart();
-}
-
-function renderCart(){
-  if(cart.length===0){
-    cartDiv.innerText="Carrito vacío";
-    return;
-  }
-  cartDiv.innerHTML=cart.map(c=>`• ${c.name} RD$${c.price}`).join("<br>");
-}
-
-function sendWhatsApp(){
-  if(cart.length===0){
-    alert("El carrito está vacío");
-    return;
-  }
-  let msg="Pedido Colmado El Ideal:%0A";
-  cart.forEach(c=>msg+=`- ${c.name} RD$${c.price}%0A`);
-  window.open(`https://wa.me/${phone}?text=${msg}`,"_blank");
-}
-</script>
-
+  <footer>
+    <p>© 2026 Colmado El Ideal · Todos los derechos reservados</p>
+  </footer>
 </body>
 </html>
